@@ -1,58 +1,37 @@
 "use client";
-import React, { useState, useEffect, useRef } from "react";
 import BarChart from "@/components/barChart";
 import Realization from "@/components/realization";
 import { RadioGroup, Radio } from "@heroui/radio";
+import useSortingAnimation from "@/utils/sortLogic";
 
 const SortingVisualizer = () => {
-  const [array, setArray] = useState([]);
-  const [arraySize, setArraySize] = useState(47);
-  const [sortingSpeed, setSortingSpeed] = useState(1500);
-  const [inputValue, setInputValue] = useState("");
-  const [isSorting, setIsSorting] = useState(false);
-  const [isSorted, setIsSorted] = useState(false);
-  const [withDuplicates, setWithDuplicates] = useState(false);
-  const [sortRadio, setSortRadio] = useState("ascending");
-  const containerRef = useRef(null);
-  const sortingRef = useRef(false);
+  const {
+    array,
+    setArray,
+    arraySize,
+    setArraySize,
+    sortingSpeed,
+    setSortingSpeed,
+    inputValue,
+    setInputValue,
+    isSorting,
+    setIsSorting,
+    isSorted,
+    setIsSorted,
+    withDuplicates,
+    setWithDuplicates,
+    sortRadio,
+    setSortRadio,
+    containerRef,
+    getSortedArray,
+    delay,
+    initShuffledArray,
+    initRandomArray,
+    handleInputChange,
+    sortingRef,
+  } = useSortingAnimation();
 
-  const getSortedArray = (array) => {
-    return [...array].sort((a, b) => a - b);
-  };
-
-  const delay = (ms) =>
-    new Promise((resolve) => setTimeout(resolve, 1500 - ms));
-
-  const initShuffledArray = () => {
-    const shuffledArray = Array.from({ length: arraySize }, (_, i) => i + 1)
-      .sort(() => Math.random() - 0.5)
-      .slice(0, arraySize);
-    setArray(shuffledArray);
-    setIsSorted(false);
-  };
-
-  const initRandomArray = () => {
-    if (!withDuplicates) {
-      initShuffledArray();
-      return;
-    }
-
-    const newArray = Array.from(
-      { length: arraySize },
-      () => Math.floor(Math.random() * arraySize) + 1
-    );
-    setArray(newArray);
-    setIsSorted(false);
-  };
-
-  const handleInputChange = (e) => {
-    setInputValue(e.target.value);
-  };
-
-  useEffect(() => {
-    initRandomArray();
-  }, [arraySize]);
-
+  console.log(array);
   const shellSort = async () => {
     if (isSorted) {
       return;
@@ -67,6 +46,7 @@ const SortingVisualizer = () => {
 
     setIsSorting(true);
     sortingRef.current = false;
+    1;
     let n = array.length;
     for (let gap = Math.floor(n / 2); gap > 0; gap = Math.floor(gap / 2)) {
       for (let i = gap; i < n; i++) {
@@ -201,10 +181,7 @@ void bubbleSort(int arr[], int n) {
           />
         </div>
         <div className="visualization-container" ref={containerRef}>
-          <BarChart
-            data={array}
-            containerHeight={containerRef.current?.offsetHeight || 300}
-          ></BarChart>
+          <BarChart data={array} containerHeight={300}></BarChart>
         </div>
         <style jsx>{`
           .sorting-visualizer {

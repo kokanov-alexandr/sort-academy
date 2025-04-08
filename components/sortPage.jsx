@@ -4,6 +4,7 @@ import Realization from "@/components/realization";
 import { RadioGroup, Radio } from "@heroui/radio";
 
 const SortPage = ({
+  title,
   array,
   arraySize,
   setArraySize,
@@ -23,10 +24,14 @@ const SortPage = ({
   cCode,
   cSharpCode,
 }) => {
+
+  const sort = async () => {
+
+  }
   return (
     <div>
       <div className="sorting-visualizer">
-        <h1>Визуализатор сортировок - Сортировка Шелла</h1>
+        <h1>Визуализатор сортировок - {title}</h1>
         <div className="controls">
           <input
             type="text"
@@ -81,7 +86,11 @@ const SortPage = ({
           />
         </div>
         <div className="visualization-container">
-          <BarChart data={array} containerHeight={300}></BarChart>
+          <BarChart
+            data={array}
+            containerHeight={300}
+            arraySize={arraySize}
+          ></BarChart>
         </div>
         <style jsx>{`
           .sorting-visualizer {

@@ -34,7 +34,7 @@ const BarChart = ({ data, containerHeight }) => {
         .bar {
           width: 10px;
           background-color: blue;
-          margin: 0 1px;
+          margin: 0;
         }
       `}</style>
     </div>

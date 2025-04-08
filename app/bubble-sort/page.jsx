@@ -31,7 +31,7 @@ const BubbleSort = ({}) => {
     lastSortDirection,
   } = useSortingAnimation();
 
-  const shellSort = async () => {
+  const bubbleSort = async () => {
     if (isSorted && lastSortDirection.current == sortDirection) {
       return;
     }
@@ -46,41 +46,23 @@ const BubbleSort = ({}) => {
     setIsSorting(true);
     sortingRef.current = false;
 
-    let n = array.length;
-    for (let gap = Math.floor(n / 2); gap > 0; gap = Math.floor(gap / 2)) {
-      for (let i = gap; i < n; i++) {
-        let temp = array[i];
-        let j = i;
-        while (j >= gap && comparator(array[j - gap], temp)) {
-          if (sortingRef.current) {
-            finishSort();
-            return;
-          }
-
-          await delay(sortingSpeed);
-          let newArray = [...array];
-          newArray[j] = array[j - gap];
-
-          if (sortingRef.current) {
-            finishSort();
-            return;
-          }
-
-          setArray(newArray);
-
-          array[j] = array[j - gap];
-          j -= gap;
-        }
-        array[j] = temp;
-        await delay(sortingSpeed);
-        let newArray = [...array];
-        newArray[j] = temp;
+    let newArray = [...array];
+    for (let i = 0; i < arraySize; i++) {
+      for (let j = 0; j < arraySize - i - 1; j++) {
         if (sortingRef.current) {
           finishSort();
           return;
         }
 
-        setArray(newArray);
+        if (comparator(newArray[j], newArray[j + 1])) {
+          await delay(sortingSpeed);
+          if (sortingRef.current) {
+            finishSort();
+            return;
+          }
+          [newArray[j], newArray[j + 1]] = [newArray[j + 1], newArray[j]];
+          setArray([...newArray]);
+        }
       }
     }
     finishSort();
@@ -126,6 +108,7 @@ void bubbleSort(int arr[], int n) {
   const cSharpCode = ``;
   return (
     <SortPage
+      title="Сортировка пузырьком"
       array={array}
       setArray={setArray}
       arraySize={arraySize}
@@ -145,7 +128,7 @@ void bubbleSort(int arr[], int n) {
       initShuffledArray={initShuffledArray}
       initRandomArray={initRandomArray}
       handleInputChange={handleInputChange}
-      sortFunction={shellSort}
+      sortFunction={bubbleSort}
       pythonCode={pythonCode}
       cppCode={cppCode}
       cCode={cCode}

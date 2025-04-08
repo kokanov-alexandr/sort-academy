@@ -1,10 +1,8 @@
 "use client";
-import BarChart from "@/components/barChart";
-import Realization from "@/components/realization";
-import { RadioGroup, Radio } from "@heroui/radio";
+import SortPage from "@/components/sortPage";
 import useSortingAnimation from "@/utils/sortLogic";
 
-const SortingVisualizer = () => {
+const BubbleSort = ({}) => {
   const {
     array,
     setArray,
@@ -31,7 +29,6 @@ const SortingVisualizer = () => {
     sortingRef,
   } = useSortingAnimation();
 
-  console.log(array);
   const shellSort = async () => {
     if (isSorted) {
       return;
@@ -46,7 +43,7 @@ const SortingVisualizer = () => {
 
     setIsSorting(true);
     sortingRef.current = false;
-    1;
+
     let n = array.length;
     for (let gap = Math.floor(n / 2); gap > 0; gap = Math.floor(gap / 2)) {
       for (let i = gap; i < n; i++) {
@@ -73,10 +70,10 @@ const SortingVisualizer = () => {
         await delay(sortingSpeed);
         let newArray = [...array];
         newArray[j] = temp;
-
         if (sortingRef.current) {
           return;
         }
+
         setArray(newArray);
       }
     }
@@ -122,89 +119,35 @@ void bubbleSort(int arr[], int n) {
 }`;
 
   const cSharpCode = ``;
-
   return (
-    <div>
-      <div className="sorting-visualizer">
-        <h1>Визуализатор сортировок - Сортировка Шелла</h1>
-        <div className="controls">
-          <input
-            type="text"
-            value={inputValue}
-            onChange={handleInputChange}
-            placeholder="Введите свой набор чисел от 1 до 1000 через пробел"
-          />
-          <button onClick={() => initRandomArray()} disabled={isSorting}>
-            Размещать
-          </button>
-          <label>
-            <input
-              type="checkbox"
-              checked={withDuplicates}
-              onChange={(e) => setWithDuplicates(e.target.checked)}
-            />
-            С повторениями
-          </label>
-          <RadioGroup
-            value={sortRadio}
-            onValueChange={setSortRadio}
-            color="secondary"
-            label="Сортировка"
-          >
-            <Radio value="ascending">Возрастание</Radio>
-            <Radio value="descending ">Убывание</Radio>
-          </RadioGroup>
-          <button
-            onClick={async () => {
-              await shellSort();
-            }}
-          >
-            Сортировать
-          </button>
-          <label>Количество элементов: {arraySize}</label>
-          <input
-            type="range"
-            min="10"
-            max="1000"
-            value={arraySize}
-            onChange={(e) => setArraySize(parseInt(e.target.value))}
-            disabled={isSorting}
-          />
-          <label>Скорость Сортировки:</label>
-          <input
-            type="range"
-            min="0"
-            max="1500"
-            value={sortingSpeed}
-            onChange={(e) => setSortingSpeed(parseInt(e.target.value))}
-            disabled={isSorting}
-          />
-        </div>
-        <div className="visualization-container" ref={containerRef}>
-          <BarChart data={array} containerHeight={300}></BarChart>
-        </div>
-        <style jsx>{`
-          .sorting-visualizer {
-            background-color: #121212;
-            color: white;
-            padding: 20px;
-            font-family: sans-serif;
-          }
-          .controls {
-            margin-bottom: 20px;
-          }
-        `}</style>
-      </div>
-      <div>
-        <Realization
-          pythonCode={pythonCode}
-          cppCode={cppCode}
-          cCode={cCode}
-          cSharpCode={cSharpCode}
-        ></Realization>
-      </div>
-    </div>
+    <SortPage
+      array={array}
+      setArray={setArray}
+      arraySize={arraySize}
+      setArraySize={setArraySize}
+      sortingSpeed={sortingSpeed}
+      setSortingSpeed={setSortingSpeed}
+      inputValue={inputValue}
+      setInputValue={setInputValue}
+      isSorting={isSorting}
+      setIsSorting={setIsSorting}
+      isSorted={isSorted}
+      setIsSorted={setIsSorted}
+      withDuplicates={withDuplicates}
+      setWithDuplicates={setWithDuplicates}
+      sortRadio={sortRadio}
+      setSortRadio={setSortRadio}
+      containerRef={containerRef}
+      initShuffledArray={initShuffledArray}
+      initRandomArray={initRandomArray}
+      handleInputChange={handleInputChange}
+      sortFunction={shellSort}
+      pythonCode={pythonCode}
+      cppCode={cppCode}
+      cCode={cCode}
+      cSharpCode={cSharpCode}
+    ></SortPage>
   );
 };
 
-export default SortingVisualizer;
+export default BubbleSort;

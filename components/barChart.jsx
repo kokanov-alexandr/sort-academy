@@ -14,10 +14,6 @@ const BarChart = ({ data, containerHeight }) => {
     };
   };
 
-  if (!data) {
-    return <div>Loading data...</div>;
-  }
-
   return (
     <div
       className={`bar-chart-container`}

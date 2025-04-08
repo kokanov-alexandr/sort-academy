@@ -13,9 +13,8 @@ const SortPage = ({
   isSorting,
   withDuplicates,
   setWithDuplicates,
-  sortRadio,
-  setSortRadio,
-  containerRef,
+  sortDirection,
+  setsortDirection,
   initRandomArray,
   handleInputChange,
   sortFunction,
@@ -36,7 +35,7 @@ const SortPage = ({
             placeholder="Введите свой набор чисел от 1 до 1000 через пробел"
           />
           <button onClick={() => initRandomArray()} disabled={isSorting}>
-            Размещать
+            Размешать
           </button>
           <label>
             <input
@@ -47,8 +46,8 @@ const SortPage = ({
             С повторениями
           </label>
           <RadioGroup
-            value={sortRadio}
-            onValueChange={setSortRadio}
+            value={sortDirection}
+            onValueChange={setsortDirection}
             color="secondary"
             label="Сортировка"
           >
@@ -81,7 +80,7 @@ const SortPage = ({
             disabled={isSorting}
           />
         </div>
-        <div className="visualization-container" ref={containerRef}>
+        <div className="visualization-container">
           <BarChart data={array} containerHeight={300}></BarChart>
         </div>
         <style jsx>{`

@@ -18,26 +18,28 @@ const BubbleSort = ({}) => {
     setIsSorted,
     withDuplicates,
     setWithDuplicates,
-    sortRadio,
-    setSortRadio,
-    containerRef,
+    sortDirection,
+    setsortDirection,
     getSortedArray,
     delay,
     initShuffledArray,
     initRandomArray,
     handleInputChange,
     sortingRef,
+    finishSort,
+    comparator,
+    lastSortDirection,
   } = useSortingAnimation();
 
   const shellSort = async () => {
-    if (isSorted) {
+    if (isSorted && lastSortDirection.current == sortDirection) {
       return;
     }
 
     if (isSorting) {
       sortingRef.current = true;
       setArray(getSortedArray(array));
-      setIsSorting(false);
+      finishSort();
       return;
     }
 
@@ -49,8 +51,9 @@ const BubbleSort = ({}) => {
       for (let i = gap; i < n; i++) {
         let temp = array[i];
         let j = i;
-        while (j >= gap && array[j - gap] > temp) {
+        while (j >= gap && comparator(array[j - gap], temp)) {
           if (sortingRef.current) {
+            finishSort();
             return;
           }
 
@@ -59,8 +62,10 @@ const BubbleSort = ({}) => {
           newArray[j] = array[j - gap];
 
           if (sortingRef.current) {
+            finishSort();
             return;
           }
+
           setArray(newArray);
 
           array[j] = array[j - gap];
@@ -71,14 +76,14 @@ const BubbleSort = ({}) => {
         let newArray = [...array];
         newArray[j] = temp;
         if (sortingRef.current) {
+          finishSort();
           return;
         }
 
         setArray(newArray);
       }
     }
-    setIsSorting(false);
-    setIsSorted(true);
+    finishSort();
   };
 
   const pythonCode = `
@@ -135,9 +140,8 @@ void bubbleSort(int arr[], int n) {
       setIsSorted={setIsSorted}
       withDuplicates={withDuplicates}
       setWithDuplicates={setWithDuplicates}
-      sortRadio={sortRadio}
-      setSortRadio={setSortRadio}
-      containerRef={containerRef}
+      sortDirection={sortDirection}
+      setsortDirection={setsortDirection}
       initShuffledArray={initShuffledArray}
       initRandomArray={initRandomArray}
       handleInputChange={handleInputChange}

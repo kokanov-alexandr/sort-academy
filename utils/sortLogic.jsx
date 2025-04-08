@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from "react";
 function useSortingAnimation() {
   const DEFAULT_ARRAY_SIZE = 47;
   const DEFAULT_SORTING_SPEED = 1500;
-  const DEFAULT_SORT_RADIO = "ascending";
+  const DEFAULT_SORT_DIRECTION = "ascending";
 
   const [array, setArray] = useState([]);
   const [arraySize, setArraySize] = useState(DEFAULT_ARRAY_SIZE);
@@ -13,12 +13,14 @@ function useSortingAnimation() {
   const [isSorting, setIsSorting] = useState(false);
   const [isSorted, setIsSorted] = useState(false);
   const [withDuplicates, setWithDuplicates] = useState(false);
-  const [sortRadio, setSortRadio] = useState(DEFAULT_SORT_RADIO);
-  const containerRef = useRef(null);
+  const [sortDirection, setsortDirection] = useState(DEFAULT_SORT_DIRECTION);
   const sortingRef = useRef(false);
+  const lastSortDirection = useRef(DEFAULT_SORT_DIRECTION);
 
   const getSortedArray = (array) => {
-    return [...array].sort((a, b) => a - b);
+    return [...array].sort((a, b) =>
+      sortDirection == DEFAULT_SORT_DIRECTION ? a - b : b - a
+    );
   };
 
   const delay = (ms) =>
@@ -30,6 +32,12 @@ function useSortingAnimation() {
       .slice(0, arraySize);
     setArray(shuffledArray);
     setIsSorted(false);
+  };
+
+  const finishSort = () => {
+    setIsSorting(false);
+    setIsSorted(true);
+    lastSortDirection.current = sortDirection;
   };
 
   const initRandomArray = () => {
@@ -48,6 +56,14 @@ function useSortingAnimation() {
 
   const handleInputChange = (e) => {
     setInputValue(e.target.value);
+  };
+
+  const comparator = (firstElement, secondElement) => {
+    if (sortDirection === DEFAULT_SORT_DIRECTION) {
+      return firstElement > secondElement;
+    } else {
+      return firstElement < secondElement;
+    }
   };
 
   useEffect(() => {
@@ -69,15 +85,17 @@ function useSortingAnimation() {
     setIsSorted,
     withDuplicates,
     setWithDuplicates,
-    sortRadio,
-    setSortRadio,
-    containerRef,
+    sortDirection,
+    setsortDirection,
     getSortedArray,
     delay,
     initShuffledArray,
     initRandomArray,
     handleInputChange,
     sortingRef,
+    finishSort,
+    comparator,
+    lastSortDirection,
   };
 }
 

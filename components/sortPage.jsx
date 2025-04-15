@@ -24,10 +24,6 @@ const SortPage = ({
   cCode,
   cSharpCode,
 }) => {
-
-  const sort = async () => {
-
-  }
   return (
     <div>
       <div className="sorting-visualizer">

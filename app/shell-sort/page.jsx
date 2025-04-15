@@ -21,14 +21,13 @@ const ShellSort = ({}) => {
     sortDirection,
     setsortDirection,
     getSortedArray,
-    delay,
     initShuffledArray,
     initRandomArray,
     handleInputChange,
     sortingRef,
     finishSort,
-    comparator,
     lastSortDirection,
+    processEpements,
   } = useSortingAnimation();
 
   const shellSort = async () => {
@@ -47,40 +46,12 @@ const ShellSort = ({}) => {
     sortingRef.current = false;
 
     let n = array.length;
-    for (let gap = Math.floor(n / 2); gap > 0; gap = Math.floor(gap / 2)) {
-      for (let i = gap; i < n; i++) {
-        let temp = array[i];
-        let j = i;
-        while (j >= gap && comparator(array[j - gap], temp)) {
-          if (sortingRef.current) {
-            finishSort();
-            return;
-          }
-
-          await delay(sortingSpeed);
-          let newArray = [...array];
-          newArray[j] = array[j - gap];
-
-          if (sortingRef.current) {
-            finishSort();
-            return;
-          }
-
-          setArray(newArray);
-
-          array[j] = array[j - gap];
-          j -= gap;
+    let newArray = [...array];
+    for (let i = Math.floor(n / 2); i > 0; i = Math.floor(i / 2)) {
+      for (let j = i; j < n; j++) {
+        for (let k = j - i; k >= 0; k -= i) {
+          newArray = await processEpements(newArray, k, k + i);
         }
-        array[j] = temp;
-        await delay(sortingSpeed);
-        let newArray = [...array];
-        newArray[j] = temp;
-        if (sortingRef.current) {
-          finishSort();
-          return;
-        }
-
-        setArray(newArray);
       }
     }
     finishSort();

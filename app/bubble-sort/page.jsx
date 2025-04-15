@@ -21,14 +21,13 @@ const BubbleSort = ({}) => {
     sortDirection,
     setsortDirection,
     getSortedArray,
-    delay,
     initShuffledArray,
     initRandomArray,
     handleInputChange,
     sortingRef,
     finishSort,
-    comparator,
     lastSortDirection,
+    processEpements,
   } = useSortingAnimation();
 
   const bubbleSort = async () => {
@@ -54,15 +53,7 @@ const BubbleSort = ({}) => {
           return;
         }
 
-        if (comparator(newArray[j], newArray[j + 1])) {
-          await delay(sortingSpeed);
-          if (sortingRef.current) {
-            finishSort();
-            return;
-          }
-          [newArray[j], newArray[j + 1]] = [newArray[j + 1], newArray[j]];
-          setArray([...newArray]);
-        }
+        newArray = await processEpements(newArray, j, j + 1);
       }
     }
     finishSort();

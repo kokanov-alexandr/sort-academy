@@ -16,6 +16,7 @@ const BarChart = ({ data, containerHeight }) => {
 
   return (
     <div
+      id="sort-elements-bar"
       className={`bar-chart-container`}
       style={{
         height: "500px",

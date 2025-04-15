@@ -5,7 +5,9 @@ function useSortingAnimation() {
   const DEFAULT_ARRAY_SIZE = 47;
   const DEFAULT_SORTING_SPEED = 1500;
   const DEFAULT_SORT_DIRECTION = "ascending";
-
+  const DEFAULT_COLOR = "blue";
+  const BAD_COLOR = "red";
+  const GOOD_COLOR = "green";
   const [array, setArray] = useState([]);
   const [arraySize, setArraySize] = useState(DEFAULT_ARRAY_SIZE);
   const [sortingSpeed, setSortingSpeed] = useState(DEFAULT_SORTING_SPEED);
@@ -66,6 +68,50 @@ function useSortingAnimation() {
     }
   };
 
+  const changeColor = (index, color) => {
+    const elementsBar = document.getElementById("sort-elements-bar");
+    const elements = elementsBar.children;
+    elements[index].style.backgroundColor = color;
+  };
+
+  const processEpements = async (newArray, firstIndex, secondIndex) => {
+    if (comparator(newArray[firstIndex], newArray[secondIndex])) {
+      changeColor(firstIndex, BAD_COLOR);
+      changeColor(secondIndex, BAD_COLOR);
+
+      await delay(sortingSpeed);
+
+      if (sortingRef.current) {
+        finishSort();
+        return;
+      }
+
+      [newArray[firstIndex], newArray[secondIndex]] = [
+        newArray[secondIndex],
+        newArray[firstIndex],
+      ];
+
+      setArray([...newArray]);
+
+      changeColor(firstIndex, GOOD_COLOR);
+      changeColor(secondIndex, GOOD_COLOR);
+
+      await delay(sortingSpeed);
+
+      changeColor(firstIndex, DEFAULT_COLOR);
+      changeColor(secondIndex, DEFAULT_COLOR);
+    } else {
+      changeColor(firstIndex, GOOD_COLOR);
+      changeColor(secondIndex, GOOD_COLOR);
+
+      await delay(sortingSpeed);
+
+      changeColor(firstIndex, DEFAULT_COLOR);
+      changeColor(secondIndex, DEFAULT_COLOR);
+    }
+
+    return newArray;
+  };
   useEffect(() => {
     initRandomArray();
   }, [arraySize]);
@@ -88,14 +134,13 @@ function useSortingAnimation() {
     sortDirection,
     setsortDirection,
     getSortedArray,
-    delay,
     initShuffledArray,
     initRandomArray,
     handleInputChange,
     sortingRef,
     finishSort,
-    comparator,
     lastSortDirection,
+    processEpements,
   };
 }
 

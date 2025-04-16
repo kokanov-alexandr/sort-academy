@@ -74,14 +74,23 @@ function useSortingAnimation() {
     elements[index].style.backgroundColor = color;
   };
 
+  const changeElementsColor = (firstIndex, secondIndex, color) => {
+    changeColor(firstIndex, color);
+    changeColor(secondIndex, color);
+  };
   const processEpements = async (newArray, firstIndex, secondIndex) => {
     if (comparator(newArray[firstIndex], newArray[secondIndex])) {
-      changeColor(firstIndex, BAD_COLOR);
-      changeColor(secondIndex, BAD_COLOR);
+      if (sortingRef.current) {
+        changeElementsColor(firstIndex, secondIndex, DEFAULT_COLOR);
+        finishSort();
+        return;
+      }
 
+      changeElementsColor(firstIndex, secondIndex, BAD_COLOR);
       await delay(sortingSpeed);
 
       if (sortingRef.current) {
+        changeElementsColor(firstIndex, secondIndex, DEFAULT_COLOR);
         finishSort();
         return;
       }
@@ -92,22 +101,28 @@ function useSortingAnimation() {
       ];
 
       setArray([...newArray]);
+      changeElementsColor(firstIndex, secondIndex, GOOD_COLOR);
 
-      changeColor(firstIndex, GOOD_COLOR);
-      changeColor(secondIndex, GOOD_COLOR);
+      if (sortingRef.current) {
+        changeElementsColor(firstIndex, secondIndex, DEFAULT_COLOR);
+        finishSort();
+        return;
+      }
 
       await delay(sortingSpeed);
 
-      changeColor(firstIndex, DEFAULT_COLOR);
-      changeColor(secondIndex, DEFAULT_COLOR);
+      changeElementsColor(firstIndex, secondIndex, DEFAULT_COLOR);
     } else {
-      changeColor(firstIndex, GOOD_COLOR);
-      changeColor(secondIndex, GOOD_COLOR);
+      changeElementsColor(firstIndex, secondIndex, GOOD_COLOR);
 
+      if (sortingRef.current) {
+        changeElementsColor(firstIndex, secondIndex, DEFAULT_COLOR);
+        finishSort();
+        return;
+      }
       await delay(sortingSpeed);
 
-      changeColor(firstIndex, DEFAULT_COLOR);
-      changeColor(secondIndex, DEFAULT_COLOR);
+      changeElementsColor(firstIndex, secondIndex, DEFAULT_COLOR);
     }
 
     return newArray;

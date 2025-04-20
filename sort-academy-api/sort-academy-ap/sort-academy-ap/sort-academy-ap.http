@@ -1,0 +1,6 @@
+@sort_academy_ap_HostAddress = http://localhost:5109
+
+GET {{sort_academy_ap_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

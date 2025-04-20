@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
-using sort_academy_ap.Data;
-using sort_academy_ap.Repositories;
+using sort_academy_api.Data;
+using sort_academy_api.Providers;
+using sort_academy_api.Repositories;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,12 +10,17 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<SortAcademyDbContext>(options =>
         options.UseSqlServer(builder.Configuration.GetConnectionString("SortAcademyConnection")));
 
-// Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+});
+
 
 builder.Services.AddMvc();
 builder.Services.AddScoped<UserRepository>();
+builder.Services.AddScoped<SortingRepository>();
+builder.Services.AddScoped<MapperProvider>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

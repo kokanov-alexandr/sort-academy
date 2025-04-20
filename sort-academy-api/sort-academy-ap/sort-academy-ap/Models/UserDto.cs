@@ -1,14 +1,10 @@
-﻿namespace sort_academy_ap.Models;
+﻿namespace sort_academy_api.Models;
 
 /// <summary>
 /// Пользователь
 /// </summary>
-public class UserDto
+public class UserDto : BaseModelDto
 {
-    /// <summary>
-    /// Идентификатор
-    /// </summary>
-    public int Id { get; set; }
 
     /// <summary>
     /// Почта

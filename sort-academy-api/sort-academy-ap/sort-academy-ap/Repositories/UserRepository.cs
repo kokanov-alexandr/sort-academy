@@ -1,7 +1,7 @@
-﻿using sort_academy_ap.Data;
-using sort_academy_ap.Data.Models;
+﻿using sort_academy_api.Data;
+using sort_academy_api.Data.Models;
 
-namespace sort_academy_ap.Repositories;
+namespace sort_academy_api.Repositories;
 
 /// <summary>
 /// Репозиторий пользователей

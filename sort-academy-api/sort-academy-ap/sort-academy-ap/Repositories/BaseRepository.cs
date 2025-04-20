@@ -1,9 +1,7 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using sort_academy_ap.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using sort_academy_api.Data;
 
-namespace sort_academy_ap.Repositories;
+namespace sort_academy_api.Repositories;
 
 public class BaseRepository<T>(SortAcademyDbContext dbContext, ILogger<BaseRepository<T>> logger) where T : class
 {

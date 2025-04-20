@@ -12,8 +12,8 @@ using sort_academy_api.Data;
 namespace sort_academy_ap.Migrations
 {
     [DbContext(typeof(SortAcademyDbContext))]
-    [Migration("20250420083352_ChnageIsEmailConfirmedType")]
-    partial class ChnageIsEmailConfirmedType
+    [Migration("20250420115314_AddSortings")]
+    partial class AddSortings
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,7 +25,30 @@ namespace sort_academy_ap.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("sort_academy_ap.Data.Models.User", b =>
+            modelBuilder.Entity("sort_academy_api.Data.Models.Sorting", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DisplayName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Sortings");
+                });
+
+            modelBuilder.Entity("sort_academy_api.Data.Models.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()

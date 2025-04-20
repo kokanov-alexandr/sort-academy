@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using sort_academy_ap.Data;
-using sort_academy_ap.Data.Models;
-using sort_academy_ap.Models;
-using sort_academy_ap.Repositories;
+using sort_academy_api.Data;
+using sort_academy_api.Data.Models;
+using sort_academy_api.Models;
+using sort_academy_api.Repositories;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace sort_academy_ap.Controllers;
+namespace sort_academy_api.Controllers;
 
 /// <summary>
 /// Контроллер для работы с пользователями
@@ -19,13 +19,19 @@ public class UsersController(UserRepository userRepository) : Controller
 
 
     [HttpGet]
-    public async Task<List<User>> GetUsersAsync()
+    public async Task<ActionResult<List<User>>> GetUsersAsync()
     {
-        return await _userRepository.GetCollectionAsync();
+        var users =  await _userRepository.GetCollectionAsync();
+        if (users is null)
+        {
+            return BadRequest();
+        }
+
+        return Ok(users);
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateUserAsync([FromBody] UserDto userDto)
+    public async Task<ActionResult> CreateUserAsync([FromBody] UserDto userDto)
     {
         var salt = new byte[16];
         using (var rng = RandomNumberGenerator.Create())

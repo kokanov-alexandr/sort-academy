@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using sort_academy_ap.Data.Models;
+using sort_academy_api.Data.Models;
 
-namespace sort_academy_ap.Data;
+namespace sort_academy_api.Data;
 
 /// <summary>
 /// Контекст базы данных
@@ -11,4 +11,19 @@ public class SortAcademyDbContext(DbContextOptions<SortAcademyDbContext> options
 {
     /// <inheritdoc cref="User"/>
     public DbSet<User> Users { get; set; }
+
+    /// <inheritdoc cref="Sorting"/>
+    public DbSet<Sorting> Sortings { get; set; }
+
+    /// <inheritdoc cref="SortingProperty"/>
+    public DbSet<SortingProperty> SortingProperties { get; set; }
+
+    /// <inheritdoc cref="SortingProperty"/>
+    public DbSet<SortingSortingProperty> SortingSortingProperty { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<SortingSortingProperty>()
+            .HasKey(spv => new { spv.SortingId, spv.SortingPropertyId });
+    }
 }

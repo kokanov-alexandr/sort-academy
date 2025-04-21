@@ -8,9 +8,9 @@ public class SortingProfile : Profile
 {
     public SortingProfile()
     {
-        CreateMap<Sorting, SortingDto>();
-        CreateMap<SortingProperty, SortingPropertyDto>();
-        CreateMap<SortingSortingProperty, SortingSortingPropertyDto>();
+        CreateMap<Sorting, SortingDto>().ReverseMap();
+        CreateMap<SortingProperty, SortingPropertyDto>().ReverseMap();
+        CreateMap<SortingSortingProperty, SortingSortingPropertyDto>().ReverseMap();
     }
 
 }

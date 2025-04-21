@@ -20,8 +20,10 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 builder.Services.AddMvc();
 builder.Services.AddScoped<UserRepository>();
 builder.Services.AddScoped<SortingRepository>();
+builder.Services.AddScoped<TestRepositoryy>();
+builder.Services.AddScoped<QuestionRepositoryy>();
+builder.Services.AddScoped<AnswerOptionRepositoryy>();
 builder.Services.AddScoped<MapperProvider>();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 

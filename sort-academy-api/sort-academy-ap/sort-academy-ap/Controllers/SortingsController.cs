@@ -12,7 +12,6 @@ namespace sort_academy_api.Controllers;
 /// </summary>
 /// <param name="sortingRepository"></param>
 [Route("sortings")]
-
 public class SortingsController(SortingRepository sortingRepository, MapperProvider mapperProvider) : Controller
 {
     private readonly SortingRepository _sortingRepository = sortingRepository;
@@ -30,5 +29,24 @@ public class SortingsController(SortingRepository sortingRepository, MapperProvi
         }
 
         return Ok(mapResult);
+    }
+
+
+    [HttpPost]
+    public async Task<ActionResult<List<SortingDto>>> CreateSortingsAsync([FromBody] SortingDto sortingDto)
+    {
+        var mapResult = _mapperProvider.CreateMapByProfile<SortingDto, Sorting, SortingProfile>(sortingDto);
+        if (mapResult is null)
+        {
+            return BadRequest();
+        }
+
+        var saveResult = await _sortingRepository.SaveItemAsync(mapResult);
+        if (saveResult == 0)
+        {
+            return BadRequest();
+        }
+
+        return Ok(mapResult.Id);
     }
 }

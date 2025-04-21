@@ -1,9 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using sort_academy_api.Data.Context;
+using sort_academy_api.Data.Models;
 
 namespace sort_academy_api.Data.Repositories;
 
-public class BaseRepository<T>(SortAcademyDbContext dbContext, ILogger<BaseRepository<T>> logger) where T : class
+public class BaseRepository<T>(SortAcademyDbContext dbContext, ILogger<BaseRepository<T>> logger) where T : BaseModel
 {
     /// <summary>
     /// Контекст
@@ -32,5 +33,39 @@ public class BaseRepository<T>(SortAcademyDbContext dbContext, ILogger<BaseRepos
             return 0;
         }
 
+    }
+
+    /// <inheritdoc />
+    public virtual async Task<int> SaveItemAsync(T? entity)
+    {
+        try
+        {
+            if (entity == null)
+            {
+                Logger.LogError("Сохранение пустого объекта невозможно");
+                return 0;
+            }
+
+            var context = SortAcademyContext.Set<T>();
+            if (entity.Id == 0)
+            {
+                context.AttachRange(entity);
+                var insertResult = await SortAcademyContext.SaveChangesAsync();
+                if (insertResult == 0)
+                {
+                    return 0;
+                }
+
+                return entity.Id;
+            }
+
+            SortAcademyContext.Entry(entity).State = EntityState.Modified;
+            return await SortAcademyContext.SaveChangesAsync();
+        }
+        catch (Exception exception)
+        {
+            Logger.LogError(exception, exception.StackTrace);
+            return 0;
+        }
     }
 }

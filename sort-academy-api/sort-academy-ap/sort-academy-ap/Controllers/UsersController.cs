@@ -17,7 +17,6 @@ public class UsersController(UserRepository userRepository) : Controller
 {
     private readonly UserRepository _userRepository = userRepository;
 
-
     [HttpGet]
     public async Task<ActionResult<List<User>>> GetUsersAsync()
     {

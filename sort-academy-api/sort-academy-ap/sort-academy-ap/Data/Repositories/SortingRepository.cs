@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using sort_academy_api.Data;
+using sort_academy_api.Data.Context;
 using sort_academy_api.Data.Models;
 
-namespace sort_academy_api.Repositories;
+namespace sort_academy_api.Data.Repositories;
 
 public class SortingRepository(SortAcademyDbContext dbContext, ILogger<BaseRepository<Sorting>> logger) : BaseRepository<Sorting>(dbContext, logger)
 {

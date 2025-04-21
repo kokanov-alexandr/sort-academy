@@ -21,4 +21,9 @@ public class Sorting : BaseModel
     /// Свойства
     /// </summary>
     public List<SortingSortingProperty>? SortingSortingProperty { get; set; }
+
+    /// <summary>
+    /// Тесты
+    /// </summary>
+    public List<Test>? Tests { get; set; }
 }

@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using sort_academy_api.Data;
+using sort_academy_api.Data.Context;
+using sort_academy_api.Data.Repositories;
 using sort_academy_api.Providers;
-using sort_academy_api.Repositories;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);

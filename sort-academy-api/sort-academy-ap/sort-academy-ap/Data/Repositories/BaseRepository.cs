@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using sort_academy_api.Data;
+using sort_academy_api.Data.Context;
 
-namespace sort_academy_api.Repositories;
+namespace sort_academy_api.Data.Repositories;
 
 public class BaseRepository<T>(SortAcademyDbContext dbContext, ILogger<BaseRepository<T>> logger) where T : class
 {
@@ -31,6 +31,6 @@ public class BaseRepository<T>(SortAcademyDbContext dbContext, ILogger<BaseRepos
             Logger.LogError("Ошибка создания сущности");
             return 0;
         }
-      
-    } 
+
+    }
 }

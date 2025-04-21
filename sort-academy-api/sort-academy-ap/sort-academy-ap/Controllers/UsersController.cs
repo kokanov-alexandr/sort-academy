@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using sort_academy_api.Data;
 using sort_academy_api.Data.Models;
+using sort_academy_api.Data.Repositories;
 using sort_academy_api.Models;
-using sort_academy_api.Repositories;
 using System.Security.Cryptography;
 using System.Text;
 

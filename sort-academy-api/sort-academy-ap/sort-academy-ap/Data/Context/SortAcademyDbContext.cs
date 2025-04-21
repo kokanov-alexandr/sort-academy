@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using sort_academy_api.Data.Models;
 
-namespace sort_academy_api.Data;
+namespace sort_academy_api.Data.Context;
 
 /// <summary>
 /// Контекст базы данных
@@ -20,6 +20,15 @@ public class SortAcademyDbContext(DbContextOptions<SortAcademyDbContext> options
 
     /// <inheritdoc cref="SortingProperty"/>
     public DbSet<SortingSortingProperty> SortingSortingProperty { get; set; }
+
+    /// <inheritdoc cref="Test"/>
+    public DbSet<Test> Tests { get; set; }
+
+    /// <inheritdoc cref="Question"/>
+    public DbSet<Question> Questions { get; set; }
+
+    /// <inheritdoc cref="AnswerOption"/>
+    public DbSet<AnswerOption> AnswerOptions { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

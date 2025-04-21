@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using sort_academy_api.Data;
+using sort_academy_api.Data.Context;
 
 #nullable disable
 
@@ -21,6 +21,56 @@ namespace sort_academy_ap.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("sort_academy_api.Data.Models.AnswerOption", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("IsCorrect")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("QuestionId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("QuestionId");
+
+                    b.ToTable("AnswerOptions");
+                });
+
+            modelBuilder.Entity("sort_academy_api.Data.Models.Question", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("TestId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TestId");
+
+                    b.ToTable("Questions");
+                });
 
             modelBuilder.Entity("sort_academy_api.Data.Models.Sorting", b =>
                 {
@@ -80,6 +130,34 @@ namespace sort_academy_ap.Migrations
                     b.ToTable("SortingSortingProperty");
                 });
 
+            modelBuilder.Entity("sort_academy_api.Data.Models.Test", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("SortingId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SortingId");
+
+                    b.ToTable("Tests");
+                });
+
             modelBuilder.Entity("sort_academy_api.Data.Models.User", b =>
                 {
                     b.Property<int>("Id")
@@ -111,6 +189,20 @@ namespace sort_academy_ap.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("sort_academy_api.Data.Models.AnswerOption", b =>
+                {
+                    b.HasOne("sort_academy_api.Data.Models.Question", null)
+                        .WithMany("AnswerOptions")
+                        .HasForeignKey("QuestionId");
+                });
+
+            modelBuilder.Entity("sort_academy_api.Data.Models.Question", b =>
+                {
+                    b.HasOne("sort_academy_api.Data.Models.Test", null)
+                        .WithMany("Questions")
+                        .HasForeignKey("TestId");
+                });
+
             modelBuilder.Entity("sort_academy_api.Data.Models.SortingSortingProperty", b =>
                 {
                     b.HasOne("sort_academy_api.Data.Models.Sorting", "Sorting")
@@ -130,14 +222,35 @@ namespace sort_academy_ap.Migrations
                     b.Navigation("SortingProperty");
                 });
 
+            modelBuilder.Entity("sort_academy_api.Data.Models.Test", b =>
+                {
+                    b.HasOne("sort_academy_api.Data.Models.Sorting", "Sorting")
+                        .WithMany("Tests")
+                        .HasForeignKey("SortingId");
+
+                    b.Navigation("Sorting");
+                });
+
+            modelBuilder.Entity("sort_academy_api.Data.Models.Question", b =>
+                {
+                    b.Navigation("AnswerOptions");
+                });
+
             modelBuilder.Entity("sort_academy_api.Data.Models.Sorting", b =>
                 {
                     b.Navigation("SortingSortingProperty");
+
+                    b.Navigation("Tests");
                 });
 
             modelBuilder.Entity("sort_academy_api.Data.Models.SortingProperty", b =>
                 {
                     b.Navigation("SortingSortingProperty");
+                });
+
+            modelBuilder.Entity("sort_academy_api.Data.Models.Test", b =>
+                {
+                    b.Navigation("Questions");
                 });
 #pragma warning restore 612, 618
         }

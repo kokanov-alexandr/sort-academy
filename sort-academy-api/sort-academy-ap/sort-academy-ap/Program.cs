@@ -10,6 +10,18 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<SortAcademyDbContext>(options =>
         options.UseSqlServer(builder.Configuration.GetConnectionString("SortAcademyConnection")));
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowNextJsDev",  // Имя политики CORS
+        builder =>
+        {
+            builder.WithOrigins("http://localhost:3000", "http://10.23.28.26:3000") // Разрешить запросы только с этого источника (ваш Next.js)
+                   .AllowAnyMethod()                      // Разрешить любые HTTP методы (GET, POST, PUT, DELETE, и т.д.)
+                   .AllowAnyHeader();                     // Разрешить любые HTTP заголовки
+        });
+});
+
+
 
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
@@ -41,5 +53,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseCors("AllowNextJsDev");
 
 app.Run();

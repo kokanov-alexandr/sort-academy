@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Mvc;
 using sort_academy_api.Data.Models;
 using sort_academy_api.Data.Repositories;
 using sort_academy_api.Models;

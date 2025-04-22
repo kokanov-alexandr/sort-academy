@@ -36,6 +36,7 @@ export const useAPIMutation = (url) => {
       });
 
       if (!res.ok) {
+        
         const error = new Error(`HTTP error! Status: ${res.status}`);
         error.info = await res.json();
         throw error;

@@ -25,7 +25,7 @@ const Home = ({}) => {
         <h1>Сортировки</h1>
         <div>
           {sortings.map((item) => (
-            <div>
+            <div key={item.id}>
               <Link href={item.name}>{item.displayName}</Link>
             </div>
           ))}

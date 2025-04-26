@@ -4,12 +4,12 @@ using sort_academy_api.Data.Models;
 
 namespace sort_academy_api.Data.Repositories;
 
-public class BaseRepository<T>(SortAcademyDbContext dbContext, ILogger<BaseRepository<T>> logger) where T : BaseModel
+public abstract class BaseRepository<T>(SortAcademyDbContext dbContext, ILogger<BaseRepository<T>> logger) where T : BaseModel
 {
     /// <summary>
     /// Контекст
     /// </summary>
-    private SortAcademyDbContext SortAcademyContext { get; set; } = dbContext;
+    private  SortAcademyDbContext SortAcademyContext { get; set; } = dbContext;
 
     protected readonly ILogger<BaseRepository<T>> Logger = logger;
 

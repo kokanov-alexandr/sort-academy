@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Cors;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using sort_academy_api.Data.Models;
 using sort_academy_api.Data.Repositories;
 using sort_academy_api.Models;
+using sort_academy_api.Profiles;
 using sort_academy_api.Providers;
 
 namespace sort_academy_api.Controllers;
@@ -12,9 +12,9 @@ namespace sort_academy_api.Controllers;
 /// </summary>
 /// <param name="testRepository"></param>
 [Route("tests")]
-public class TestsController(TestRepositoryy testRepository, MapperProvider mapperProvider) : Controller
+public class TestsController(TestRepository testRepository, MapperProvider mapperProvider) : Controller
 {
-    private readonly TestRepositoryy _testRepositoryy = testRepository;
+    private readonly TestRepository _testRepositoryy = testRepository;
     private readonly MapperProvider _mapperProvider = mapperProvider;
 
     [HttpGet]

@@ -1,5 +1,8 @@
 ﻿namespace sort_academy_api.Data.Models;
 
+/// <summary>
+/// Рузальтат вопроса
+/// </summary>
 public class QuestionResult : BaseModel
 {
     /// <summary>
@@ -15,5 +18,5 @@ public class QuestionResult : BaseModel
     /// <summary>
     /// Варианты ответа пользователя
     /// </summary>
-    public List<UserAnswerOption> UserAnswerOptions { get; set; }
+    public List<AnswerOption> UserAnswerOptions { get; set; }
 }

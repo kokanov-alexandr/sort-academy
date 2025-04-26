@@ -3,6 +3,6 @@ using sort_academy_api.Data.Models;
 
 namespace sort_academy_api.Data.Repositories;
 
-public class AnswerOptionRepositoryy(SortAcademyDbContext dbContext, ILogger<BaseRepository<AnswerOption>> logger) : BaseRepository<AnswerOption>(dbContext, logger)
+public class AnswerOptionRepository(SortAcademyDbContext dbContext, ILogger<BaseRepository<AnswerOption>> logger) : BaseRepository<AnswerOption>(dbContext, logger)
 {
 }

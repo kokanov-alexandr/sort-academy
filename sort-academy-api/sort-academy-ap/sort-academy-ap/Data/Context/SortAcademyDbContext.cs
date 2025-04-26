@@ -36,9 +36,6 @@ public class SortAcademyDbContext(DbContextOptions<SortAcademyDbContext> options
     /// <inheritdoc cref="QuestionResult"/>
     public DbSet<QuestionResult> QuestionResults { get; set; }
 
-    /// <inheritdoc cref="UserAnswerOption"/>
-    public DbSet<UserAnswerOption> UserAnswerOptions { get; set; }
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<SortingSortingProperty>()

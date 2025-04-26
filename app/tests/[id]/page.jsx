@@ -3,8 +3,7 @@ import { useParams } from "next/navigation";
 import testsService from "../../../serviсes/testsService";
 
 const Test = () => {
-  const params = useParams();
-  const { id } = params;
+  const { id } = useParams();
   const {
     data: test,
     error: testError,

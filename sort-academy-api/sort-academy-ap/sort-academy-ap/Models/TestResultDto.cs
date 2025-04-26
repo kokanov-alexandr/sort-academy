@@ -1,24 +1,23 @@
-﻿namespace sort_academy_api.Data.Models;
+﻿using sort_academy_api.Data.Models;
 
-/// <summary>
-/// Результат теста
-/// </summary>
-public class TestResult : BaseModel
+namespace sort_academy_api.Models;
+
+public class TestResultDto : BaseModelDto
 {
     /// <summary>
     /// Пользователь
     /// </summary>
-    public User User { get; set; }
+    public UserDto User { get; set; }
 
     /// <summary>
     /// Тест
     /// </summary>
-    public Test Test { get; set; }
+    public TestDto Test { get; set; }
 
     /// <summary>
-    /// Результаты вопросов
+    /// Результаты ответов
     /// </summary>
-    public List<QuestionResult>? QuestionResults { get; set; }
+    public List<QuestionResultDto>? QuestionResults { get; set; }
 
     /// <summary>
     /// Дата начала теста

@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using sort_academy_api.Data;
 using sort_academy_api.Data.Models;
 using sort_academy_api.Data.Repositories;
 using sort_academy_api.Models;
+using sort_academy_api.Profiles;
 using sort_academy_api.Providers;
 
 namespace sort_academy_api.Controllers;
@@ -16,7 +16,6 @@ public class SortingsController(SortingRepository sortingRepository, MapperProvi
 {
     private readonly SortingRepository _sortingRepository = sortingRepository;
     private readonly MapperProvider _mapperProvider = mapperProvider;
-
 
     [HttpGet]
     public async Task<ActionResult<List<SortingDto>>> GetSortingsAsync()
@@ -42,11 +41,6 @@ public class SortingsController(SortingRepository sortingRepository, MapperProvi
         }
 
         var saveResult = await _sortingRepository.SaveItemAsync(mapResult);
-        if (saveResult == 0)
-        {
-            return BadRequest();
-        }
-
-        return Ok(mapResult.Id);
+        return saveResult == 0 ? BadRequest() : Ok(mapResult.Id);
     }
 }

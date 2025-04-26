@@ -12,12 +12,12 @@ builder.Services.AddDbContext<SortAcademyDbContext>(options =>
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowNextJsDev",  // Имя политики CORS
+    options.AddPolicy("AllowNextJsDev",
         builder =>
         {
-            builder.WithOrigins("http://localhost:3000", "http://10.23.28.26:3000") // Разрешить запросы только с этого источника (ваш Next.js)
-                   .AllowAnyMethod()                      // Разрешить любые HTTP методы (GET, POST, PUT, DELETE, и т.д.)
-                   .AllowAnyHeader();                     // Разрешить любые HTTP заголовки
+            builder.WithOrigins("http://localhost:3000", "http://10.23.28.26:3000")
+                   .AllowAnyMethod()
+                   .AllowAnyHeader();
         });
 });
 
@@ -32,10 +32,13 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 builder.Services.AddMvc();
 builder.Services.AddScoped<UserRepository>();
 builder.Services.AddScoped<SortingRepository>();
-builder.Services.AddScoped<TestRepositoryy>();
-builder.Services.AddScoped<QuestionRepositoryy>();
-builder.Services.AddScoped<AnswerOptionRepositoryy>();
+builder.Services.AddScoped<SortingRepository>();
+builder.Services.AddScoped<TestRepository>();
+builder.Services.AddScoped<QuestionRepository>();
+builder.Services.AddScoped<AnswerOptionRepository>();
 builder.Services.AddScoped<MapperProvider>();
+builder.Services.AddScoped<TestResultRepository>();
+builder.Services.AddScoped<QuestionResultRepository>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 

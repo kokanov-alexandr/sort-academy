@@ -2,7 +2,7 @@
 using sort_academy_api.Data.Models;
 using sort_academy_api.Models;
 
-namespace sort_academy_api;
+namespace sort_academy_api.Profiles;
 
 public class TestProfile : Profile
 {

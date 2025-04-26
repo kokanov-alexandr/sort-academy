@@ -3,7 +3,7 @@
 /// <summary>
 /// Базовая модель
 /// </summary>
-public class BaseModel
+public abstract class BaseModel
 {
     /// <summary>
     /// Идентификатор

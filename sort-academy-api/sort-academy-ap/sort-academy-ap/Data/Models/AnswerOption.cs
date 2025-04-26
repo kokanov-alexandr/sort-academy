@@ -14,4 +14,10 @@ public class AnswerOption : BaseModel
     /// Верный
     /// </summary>
     public bool IsCorrect { get; set; }
+
+    /// <summary>
+    /// Ответы на вопрос
+    /// </summary>
+    public List<QuestionResult> QuestionResults { get; set; }
+
 }

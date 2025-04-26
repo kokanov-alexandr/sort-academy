@@ -4,7 +4,7 @@ using sort_academy_api.Data.Models;
 
 namespace sort_academy_api.Data.Repositories;
 
-public class TestRepositoryy(SortAcademyDbContext dbContext, ILogger<BaseRepository<Test>> logger) : BaseRepository<Test>(dbContext, logger)
+public class TestRepository(SortAcademyDbContext dbContext, ILogger<BaseRepository<Test>> logger) : BaseRepository<Test>(dbContext, logger)
 {
     public async Task<List<Test>> GetTestsAsync()
     {

@@ -35,7 +35,11 @@ public class BaseRepository<T>(SortAcademyDbContext dbContext, ILogger<BaseRepos
 
     }
 
-    /// <inheritdoc />
+    public virtual async Task<T?> GetItemByIdAsync(int id)
+    {
+        return SortAcademyContext.Set<T>().FirstOrDefault(x => x.Id == id);
+}
+
     public virtual async Task<int> SaveItemAsync(T? entity)
     {
         try

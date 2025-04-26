@@ -22,4 +22,21 @@ public class TestRepositoryy(SortAcademyDbContext dbContext, ILogger<BaseReposit
             throw new Exception("Ошибка при получении сортировок");
         }
     }
+
+    public async Task<Test> GetTestByIdAsync(int id)
+    {
+        try
+        {
+            return  await dbContext.Tests
+                .Include(x => x.Sorting)
+                .Include(x => x.Questions)
+                .ThenInclude(x => x.AnswerOptions)
+                .FirstOrDefaultAsync(x => x.Id == id);
+
+        }
+        catch (Exception)
+        {
+            throw new Exception("Ошибка при получении сортировок");
+        }
+    }
 }

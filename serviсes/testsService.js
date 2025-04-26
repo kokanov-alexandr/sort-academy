@@ -5,6 +5,10 @@ const testsService = {
     return useAPI("/tests");
   },
 
+  useGetTestById: (id) => {
+    return useAPI(`/tests/${id}`);
+  },
+
   useCreateTest: () => {
     return useAPIMutation("/tests");
   },

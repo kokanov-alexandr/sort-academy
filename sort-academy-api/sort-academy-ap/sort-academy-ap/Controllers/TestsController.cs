@@ -29,6 +29,18 @@ public class TestsController(TestRepositoryy testRepository, MapperProvider mapp
         return Ok(tests);
     }
 
+    [HttpGet("{id}")]
+    public async Task<ActionResult<List<User>>> GetTestByIdAsync([FromRoute] int id)
+    {
+        var test = await _testRepositoryy.GetTestByIdAsync(id);
+        if (test is null)
+        {
+            return NotFound();
+        }
+
+        return Ok(test);
+    }
+
     [HttpPost]
     public async Task<ActionResult<List<User>>> CreateTestAsync([FromBody] TestDto testDto)
     {

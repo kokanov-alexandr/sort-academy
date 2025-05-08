@@ -1,7 +1,7 @@
 import useSWR from "swr";
 import useSWRMutation from "swr/mutation";
 
-const API_BASE_URL = "https://localhost:7022";
+const API_BASE_URL = "https://localhost:44327";
 
 const fetcher = async (url) => {
   const res = await fetch(`${API_BASE_URL}${url}`);

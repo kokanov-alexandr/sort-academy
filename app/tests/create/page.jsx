@@ -11,7 +11,7 @@ const CreateTest = ({}) => {
   } = sortingsService.useGetSortings();
 
   const {
-    trigger: createTest,
+    trigger: createTest,  
     error: createError,
     isMutating,
   } = testsService.useCreateTest();

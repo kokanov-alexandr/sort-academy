@@ -5,7 +5,6 @@
 /// </summary>
 public class UserDto : BaseModelDto
 {
-
     /// <summary>
     /// Почта
     /// </summary>
@@ -29,5 +28,5 @@ public class UserDto : BaseModelDto
     /// <summary>
     /// Подтверждена ли почта
     /// </summary>
-    public string IsEmailConfirmed { get; set; }
+    public bool IsEmailConfirmed { get; set; }
 }

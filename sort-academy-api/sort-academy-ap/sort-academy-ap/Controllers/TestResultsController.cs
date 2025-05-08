@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using sort_academy_api.Data.Models;
 using sort_academy_api.Data.Repositories;
 using sort_academy_api.Models;
@@ -13,6 +14,7 @@ namespace sort_academy_api.Controllers;
 /// <param name="testResultRepository"></param>
 /// <param name="questionResultRepository"></param>
 /// <param name="mapperProvider"></param>
+[Authorize]
 [Route("tests/results")]
 public class TestResultsController(TestResultRepository testResultRepository, 
     QuestionResultRepository questionResultRepository, MapperProvider mapperProvider) : Controller

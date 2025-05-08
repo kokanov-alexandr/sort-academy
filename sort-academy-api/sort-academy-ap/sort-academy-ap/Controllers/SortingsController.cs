@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using sort_academy_api.Data.Models;
 using sort_academy_api.Data.Repositories;
 using sort_academy_api.Models;
@@ -11,6 +12,7 @@ namespace sort_academy_api.Controllers;
 /// Контроллер для работы с соритровками
 /// </summary>
 /// <param name="sortingRepository"></param>
+[Authorize]
 [Route("sortings")]
 public class SortingsController(SortingRepository sortingRepository, MapperProvider mapperProvider) : Controller
 {

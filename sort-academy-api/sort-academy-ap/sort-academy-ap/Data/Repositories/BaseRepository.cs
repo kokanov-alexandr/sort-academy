@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
 using sort_academy_api.Data.Context;
 using sort_academy_api.Data.Models;
 
@@ -34,13 +35,12 @@ public abstract class BaseRepository<T>(SortAcademyDbContext dbContext, ILogger<
         }
 
     }
-
-    public virtual async Task<T?> GetItemByIdAsync(int id)
+    public async Task<T?> GetItemByIdAsync(int id)
     {
         return SortAcademyContext.Set<T>().FirstOrDefault(x => x.Id == id);
-}
+    }
 
-    public virtual async Task<int> SaveItemAsync(T? entity)
+    public async Task<int> SaveItemAsync(T? entity)
     {
         try
         {
@@ -70,6 +70,19 @@ public abstract class BaseRepository<T>(SortAcademyDbContext dbContext, ILogger<
         {
             Logger.LogError(exception, exception.StackTrace);
             return 0;
+        }
+    }
+    public async Task<T> GetItemAsNoTrackingAsync(Expression<Func<T, bool>> predicate)
+    {
+        try
+        {
+            var dbSet = SortAcademyContext.Set<T>();
+            return await dbSet.AsNoTracking().FirstOrDefaultAsync(predicate);
+        }
+        catch (Exception exception)
+        {
+            Logger.LogError(exception, exception.StackTrace);
+            return null;
         }
     }
 }

@@ -1,13 +1,16 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
+using System.Text;
+using MailKit.Security;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+using MimeKit;
 using sort_academy_api.Data.Models;
 using sort_academy_api.Data.Repositories;
 using sort_academy_api.Models;
-using System.Security.Cryptography;
-using System.Text;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.IdentityModel.Tokens;
+using SmtpClient = MailKit.Net.Smtp.SmtpClient;
 
 namespace sort_academy_api.Controllers;
 
@@ -30,39 +33,49 @@ public class UsersController(UserRepository userRepository, IConfiguration confi
         return Ok(users);
     }
 
-    /// <summary>
-    /// Регистрация
-    /// </summary>
-    /// <param name="userDto"></param>
-    /// <returns></returns>
-    [Authorize]
-    [HttpPost]
-    public async Task<ActionResult> RegistrationAsync([FromBody] UserDto userDto)
+    private static string GetPasswordHash(string password, string storedPasswordSalt)
     {
-        var salt = new byte[16];
-        using (var rng = RandomNumberGenerator.Create())
-        {
-            rng.GetBytes(salt);
-        }
-        var saltString = Convert.ToBase64String(salt);
-
-        var passwordWithSalt = userDto.Password + saltString;
+        var passwordWithSalt = password + storedPasswordSalt;
         var bytes = SHA256.HashData(Encoding.UTF8.GetBytes(passwordWithSalt));
         var builder = new StringBuilder();
         foreach (var t in bytes)
         {
             builder.Append(t.ToString("x2"));
         }
-
-        var user = new User
+        
+        return builder.ToString();
+    } 
+    
+    private static User MapToUser(UserDto userDto)
+    {
+        
+        var salt = new byte[16];
+        using (var rng = RandomNumberGenerator.Create())
+        {
+            rng.GetBytes(salt);
+        }
+        var saltString = Convert.ToBase64String(salt);
+        
+        return new User
         {
             Email = userDto.Email,
-            PasswordHash = builder.ToString(),
+            PasswordHash = GetPasswordHash(userDto.Password, saltString),
             PasswordSalt = saltString,
             CreatedDate = DateTime.UtcNow,
             IsEmailConfirmed = false,
         };
-
+    }
+    
+    /// <summary>
+    /// Регистрация
+    /// </summary>
+    /// <param name="userDto">модель пользователя</param>
+    /// <returns></returns>
+    [HttpPost]
+    public async Task<ActionResult> RegistrationAsync([FromBody] UserDto userDto)
+    {
+        return await SendConfirmMailMessageAsync();
+        var user = MapToUser(userDto);
         var createUserResult = await _userRepository.CreateAsync(user);
         if (createUserResult == 1)
         {
@@ -74,15 +87,7 @@ public class UsersController(UserRepository userRepository, IConfiguration confi
 
     private static bool VerifyPassword(string password, string storedPasswordHash, string storedPasswordSalt)
     {
-        var passwordWithSalt = password + storedPasswordSalt;
-        var bytes = SHA256.HashData(Encoding.UTF8.GetBytes(passwordWithSalt));
-        var builder = new StringBuilder();
-        foreach (var t in bytes)
-        {
-            builder.Append(t.ToString("x2"));
-        }
-        var hashedPassword = builder.ToString();
-        return hashedPassword == storedPasswordHash;
+        return GetPasswordHash(password, storedPasswordSalt) ==  storedPasswordHash;
     }
 
     private string GenerateJwtToken(User user)
@@ -99,7 +104,7 @@ public class UsersController(UserRepository userRepository, IConfiguration confi
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(claims),
-            Expires = DateTime.UtcNow.AddSeconds(10), 
+            Expires = DateTime.UtcNow.AddHours(4), 
             SigningCredentials = creds,
             Issuer = _configuration["Jwt:Issuer"],
             Audience = _configuration["Jwt:Audience"]
@@ -134,5 +139,38 @@ public class UsersController(UserRepository userRepository, IConfiguration confi
         var token = GenerateJwtToken(user);
         return Ok(token);
 
+    }
+
+    private MimeMessage GetMessage(string salt)
+    {
+        var confirmationUrl = $"https://translate.yandex.ru/?lang=en-ru?{salt}";
+        var message = new MimeMessage();
+        message.From.Add(new MailboxAddress(_configuration["EmailSettings:SenderName"], _configuration["EmailSettings:SenderEmail"]));
+        message.To.Add(new MailboxAddress("Получатель", "kokanovvv@gmail.com"));
+        message.Subject = "Подтвердите свой email для завершения регистрации";
+
+        message.Body = new TextPart("plain")
+        {
+            Text = $"Для подтверждения почты, пожалуйста, перейдите по ссылке ниже: \n{confirmationUrl}\nОбратите внимание: эта ссылка действительна в течение 10 минут.\n" +
+                   $"Если вы не регистрировались на сайте, пожалуйста, проигнорируйте это письмо."
+        };
+        
+        return message;
+    }
+    private async Task<ActionResult> SendConfirmMailMessageAsync()
+    {
+        try
+        {
+            using var client = new SmtpClient();
+            await client.ConnectAsync(_configuration["EmailSettings:SmtpServer"], int.Parse(_configuration["EmailSettings:SmtpPort"] ?? string.Empty), SecureSocketOptions.SslOnConnect);            
+            await client.AuthenticateAsync(_configuration["EmailSettings:SmtpUsername"], _configuration["EmailSettings:SmtpPassword"]);
+            await client.SendAsync(GetMessage("test_salt"));
+            await client.DisconnectAsync(true);
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
 }

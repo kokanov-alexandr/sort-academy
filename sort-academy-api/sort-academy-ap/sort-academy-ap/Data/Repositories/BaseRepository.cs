@@ -72,6 +72,7 @@ public abstract class BaseRepository<T>(SortAcademyDbContext dbContext, ILogger<
             return 0;
         }
     }
+    
     public async Task<T> GetItemAsNoTrackingAsync(Expression<Func<T, bool>> predicate)
     {
         try
@@ -83,6 +84,20 @@ public abstract class BaseRepository<T>(SortAcademyDbContext dbContext, ILogger<
         {
             Logger.LogError(exception, exception.StackTrace);
             return null;
+        }
+    }
+    
+    public async Task<int> DeleteItemAsync(T entity)
+    {
+        try
+        {
+            SortAcademyContext.Set<T>().Remove(entity);
+            return await SortAcademyContext.SaveChangesAsync();
+        }
+        catch (Exception exception)
+        {
+            Logger.LogError(exception, exception.StackTrace);
+            return 0;
         }
     }
 }

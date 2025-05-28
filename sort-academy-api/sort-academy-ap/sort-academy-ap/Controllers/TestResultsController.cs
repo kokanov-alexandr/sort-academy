@@ -23,7 +23,7 @@ public class TestResultsController(TestResultRepository testResultRepository,
     private readonly QuestionResultRepository _questionResultRepository = questionResultRepository;
     private readonly MapperProvider _mapperProvider = mapperProvider;
 
-    [HttpGet("user/{userId}")]
+    [HttpGet("user/{userId:int}")]
     public async Task<ActionResult> GetUserTestResultsAsync([FromRoute] int userId)
     {
         var tests = await _testResultRepository.GetUserTestResultsAsync(userId);
@@ -31,6 +31,7 @@ public class TestResultsController(TestResultRepository testResultRepository,
         return mapResult is null ? BadRequest() : Ok(tests);
     }
 
+    
     [HttpGet]
     public async Task<ActionResult> GeTestResultByIdAsync([FromQuery] int id)
     {
@@ -44,6 +45,7 @@ public class TestResultsController(TestResultRepository testResultRepository,
         return mapResult is null ? BadRequest() : Ok(test);
     }
 
+    
     [HttpPost]
     public async Task<ActionResult> CreateTestResultsAsync([FromBody] TestResultDto testResultDto)
     {

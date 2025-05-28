@@ -1,7 +1,7 @@
 ﻿namespace sort_academy_api.Data.Models;
 
 /// <summary>
-/// Рузальтат вопроса
+/// Результат вопроса
 /// </summary>
 public class QuestionResult : BaseModel
 {

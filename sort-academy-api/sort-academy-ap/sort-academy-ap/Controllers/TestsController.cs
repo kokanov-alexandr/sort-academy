@@ -31,7 +31,12 @@ public class TestsController(TestRepository testRepository, MapperProvider mappe
         return Ok(tests);
     }
 
-    [HttpGet("{id}")]
+    /// <summary>
+    /// Получение теста по идентификатору
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    [HttpGet("{id:int}")]
     public async Task<ActionResult<List<User>>> GetTestByIdAsync([FromRoute] int id)
     {
         var test = await _testRepositoryy.GetTestByIdAsync(id);

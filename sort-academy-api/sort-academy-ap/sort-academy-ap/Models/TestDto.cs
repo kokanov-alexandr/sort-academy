@@ -1,5 +1,8 @@
 ﻿namespace sort_academy_api.Models;
 
+/// <summary>
+/// Модель теста
+/// </summary>
 public class TestDto : BaseModelDto
 {
     /// <summary>

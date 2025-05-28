@@ -42,6 +42,7 @@ builder.Services.AddScoped<AnswerOptionRepository>();
 builder.Services.AddScoped<MapperProvider>();
 builder.Services.AddScoped<TestResultRepository>();
 builder.Services.AddScoped<QuestionResultRepository>();
+builder.Services.AddScoped<MailConfirmationEventRepository>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 

@@ -1,5 +1,8 @@
 ﻿namespace sort_academy_api.Data.Models;
 
+/// <summary>
+/// Сортировка
+/// </summary>
 public class Sorting : BaseModel
 {
     /// <summary>

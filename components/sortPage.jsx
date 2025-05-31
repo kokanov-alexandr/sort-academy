@@ -1,7 +1,13 @@
 "use client";
-import BarChart from "@/components/barChart";
+import SortChart from "@/components/barChart";
 import Realization from "@/components/realization";
-import { RadioGroup, Radio } from "@heroui/radio";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Input } from "@/components/ui/input";
+import { Slider } from "@/components/ui/slider";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 const SortPage = ({
   title,
@@ -24,81 +30,80 @@ const SortPage = ({
   cCode,
   cSharpCode,
 }) => {
+  const handleCheckboxClick = (newCheckedState) => {
+    setWithDuplicates(newCheckedState);
+  };
+
   return (
     <div>
       <div className="sorting-visualizer">
         <h1>Визуализатор сортировок - {title}</h1>
         <div className="controls">
-          <input
-            type="text"
-            value={inputValue}
-            onChange={handleInputChange}
-            placeholder="Введите свой набор чисел от 1 до 1000 через пробел"
-          />
-          <button onClick={() => initRandomArray()} disabled={isSorting}>
+          <Button onClick={() => initRandomArray()} disabled={isSorting}>
             Размешать
-          </button>
-          <label>
-            <input
-              type="checkbox"
+          </Button>
+          <div className="flex items-center space-x-2">
+            <Checkbox
+              id="terms"
               checked={withDuplicates}
-              onChange={(e) => setWithDuplicates(e.target.checked)}
+              onCheckedChange={handleCheckboxClick}
             />
-            С повторениями
-          </label>
+            <label
+              htmlFor="terms"
+              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            >
+              С повторениями
+            </label>
+          </div>
           <RadioGroup
             value={sortDirection}
             onValueChange={setsortDirection}
             color="secondary"
             label="Сортировка"
           >
-            <Radio value="ascending">Возрастание</Radio>
-            <Radio value="descending ">Убывание</Radio>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="ascending" />
+              <Label htmlFor="r1">Возрастание</Label>
+            </div>
+
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="descending" />
+              <Label htmlFor="r1">Убывание</Label>
+            </div>
           </RadioGroup>
-          <button
+          <Button
             onClick={async () => {
               await sortFunction();
             }}
           >
             Сортировать
-          </button>
+          </Button>
           <label>Количество элементов: {arraySize}</label>
-          <input
-            type="range"
-            min="10"
-            max="1000"
-            value={arraySize}
-            onChange={(e) => setArraySize(parseInt(e.target.value))}
+          <Slider
+            defaultValue={[arraySize]}
+            max={100}
+            step={1}
+            onValueChange={setArraySize}
             disabled={isSorting}
+            className={cn("w-[30%]")}
           />
-          <label>Скорость Сортировки:</label>
-          <input
-            type="range"
-            min="0"
-            max="1500"
-            value={sortingSpeed}
-            onChange={(e) => setSortingSpeed(parseInt(e.target.value))}
+          <label>Скорость Сортировки: {sortingSpeed}</label>
+          <Slider
+            defaultValue={[sortingSpeed]}
+            max={1500}
+            step={1}
+            onValueChange={setSortingSpeed}
             disabled={isSorting}
-          />
+            className={cn("w-[30%]")}
+          />{" "}
         </div>
         <div className="visualization-container">
-          <BarChart
+          <SortChart
             data={array}
             containerHeight={300}
             arraySize={arraySize}
-          ></BarChart>
+          ></SortChart>
         </div>
-        <style jsx>{`
-          .sorting-visualizer {
-            background-color: #121212;
-            color: white;
-            padding: 20px;
-            font-family: sans-serif;
-          }
-          .controls {
-            margin-bottom: 20px;
-          }
-        `}</style>
       </div>
       <div>
         <Realization

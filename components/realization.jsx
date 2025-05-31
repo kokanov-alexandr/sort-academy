@@ -1,10 +1,7 @@
-import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useState } from "react";
 
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-
-const Reatization = ({pythonCode, cppCode, cCode, cSharpCode}) => {
+const Reatization = ({ pythonCode, cppCode, cCode, cSharpCode }) => {
   const [language, setlanguage] = useState("python");
   const [codeString, setCode] = useState(pythonCode);
   const changeLanguageHandle = (event, value) => {
@@ -30,16 +27,19 @@ const Reatization = ({pythonCode, cppCode, cCode, cSharpCode}) => {
   return (
     <div>
       <Tabs
-        value={language}
         onChange={changeLanguageHandle}
-        aria-label="basic tabs example"
+        defaultValue="account"
+        className="w-[400px]"
       >
-        <Tab value="python" label="Python"></Tab>
-        <Tab value="cpp" label="C++"></Tab>
-        <Tab value="c" label="C" />
-        <Tab value="csharp" label="C#" />
+        <TabsList>
+          <TabsTrigger value="python">Python</TabsTrigger>
+          <TabsTrigger value="cpp">C++</TabsTrigger>
+          <TabsTrigger value="c">C</TabsTrigger>
+          <TabsTrigger value="csharp">C#</TabsTrigger>
+        </TabsList>
+        <TabsContent value="python">pythonCode</TabsContent>
+        <TabsContent value="password">Change your password here.</TabsContent>
       </Tabs>
-      <SyntaxHighlighter language={language}>{codeString}</SyntaxHighlighter>
     </div>
   );
 };

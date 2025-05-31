@@ -96,6 +96,7 @@ void bubbleSort(int arr[], int n) {
   }
 }`;
 
+  console.log(array);
   const cSharpCode = ``;
   return (
     <SortPage

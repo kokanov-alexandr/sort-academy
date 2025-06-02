@@ -1,10 +1,10 @@
 import Image from "next/image";
-import RegistrationForm from "../components/registerForm";
+import AuthorizationForm from "../components/authorizationForm";
 
 export default function Home() {
   return (
     <div className="m-20 items-center justify-items-center">
-      <RegistrationForm></RegistrationForm>
+      <AuthorizationForm></AuthorizationForm>
     </div>
   );
 }

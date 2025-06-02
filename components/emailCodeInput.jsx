@@ -39,12 +39,6 @@ const EmailCodeInput = ({ salt }) => {
   const [code, setCode] = useState("");
 
   const validateForm = async () => {
-    // if (code.length < 6) {
-    //   setError("Введите код!");
-    //   return false;
-    // }
-
-    setError("");
     return true;
   };
 

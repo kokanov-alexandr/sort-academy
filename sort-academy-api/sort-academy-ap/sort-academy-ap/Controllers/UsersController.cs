@@ -166,7 +166,7 @@ public class UsersController(
 
         if (!VerifyPassword(userDto.Password, user.PasswordHash, user.PasswordSalt))
         {
-            return BadRequest();
+            return Problem(statusCode: 401, detail: "Неверный логин или пароль");
         }
 
         var token = GenerateJwtToken(user);

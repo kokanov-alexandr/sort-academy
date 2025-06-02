@@ -1,9 +1,11 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
+using System.Security.Cryptography.Xml;
 using System.Text;
 using MailKit.Security;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using MimeKit;
@@ -49,7 +51,24 @@ public class UsersController(
 
         return Convert.ToBase64String(salt);
     }
-    
+
+
+    public static string GenerateNumericCode(int length = 6)
+    {
+        var random = new RNGCryptoServiceProvider();
+        var bytes = new byte[length];
+        var result = new char[length];
+
+        for (int i = 0; i < length; i++)
+        {
+            random.GetBytes(bytes, i, 1);
+            result[i] = (char)('0' + (bytes[i] % 10));
+        }
+
+        return new string(result);
+    }
+
+
     private static string GetPasswordHash(string password, string storedPasswordSalt)
     {
         var passwordWithSalt = password + storedPasswordSalt;
@@ -84,6 +103,12 @@ public class UsersController(
     [HttpPost]
     public async Task<ActionResult> RegistrationAsync([FromBody] UserDto userDto)
     {
+        var getExistUser = await _userRepository.GetItemAsNoTrackingAsync(x => x.Email == userDto.Email);
+        if (getExistUser is not null)
+        {
+            return Problem(statusCode: 409, detail: "Уже есть аккаунт с данным адресом электронной почты!");
+
+        }
         var user = MapToUser(userDto);
         var createUserResult = await _userRepository.CreateAsync(user);
         if (createUserResult == 0)
@@ -116,7 +141,7 @@ public class UsersController(
             Expires = DateTime.UtcNow.AddHours(4),
             SigningCredentials = creds,
             Issuer = _configuration["Jwt:Issuer"],
-            Audience = _configuration["Jwt:Audience"]
+            Audience = _configuration["Jwt:Audience1"]
         };
 
         var tokenHandler = new JwtSecurityTokenHandler();
@@ -145,12 +170,11 @@ public class UsersController(
         }
 
         var token = GenerateJwtToken(user);
-        return Ok(token);
+        return Ok(new { token = token});
     }
 
-    private MimeMessage GetMessage(string email, string salt)
+    private MimeMessage GetMessage(string email, string code)
     {
-        var confirmationUrl = $"https://translate.yandex.ru/?lang=en-ru?{salt}";
         var message = new MimeMessage();
         message.From.Add(new MailboxAddress(_configuration["EmailSettings:SenderName"],
             _configuration["EmailSettings:SenderEmail"]));
@@ -160,14 +184,14 @@ public class UsersController(
         message.Body = new TextPart("plain")
         {
             Text =
-                $"Для подтверждения почты, пожалуйста, перейдите по ссылке ниже: \n{confirmationUrl}\nОбратите внимание: эта ссылка действительна в течение 10 минут.\n" +
+                $"Ваш код подтверждения: {code}. Обратите внимание: код подтверждения действует в течение 5 минут.\n" +
                 $"Если вы не регистрировались на сайте, пожалуйста, проигнорируйте это письмо."
         };
 
         return message;
     }
 
-    private async Task<ActionResult> SendConfirmMailMessageAsync(string email, string salt)
+    private async Task<ActionResult> SendConfirmMailMessageAsync(string email, string code)
     {
         try
         {
@@ -176,7 +200,7 @@ public class UsersController(
                 int.Parse(_configuration["EmailSettings:SmtpPort"] ?? string.Empty), SecureSocketOptions.SslOnConnect);
             await client.AuthenticateAsync(_configuration["EmailSettings:SmtpUsername"],
                 _configuration["EmailSettings:SmtpPassword"]);
-            await client.SendAsync(GetMessage(email, salt));
+            await client.SendAsync(GetMessage(email, code));
             await client.DisconnectAsync(true);
             return Ok();
         }
@@ -189,11 +213,13 @@ public class UsersController(
     private async Task<ActionResult> ConfirmMailAsync(string email)
     {
         var salt = GenerateSalt(32);
+        var code = GenerateNumericCode();
         var mailConfirmationEvent = new MailConfirmationEvent
         {
             Email = email,
             CreatedDate = DateTime.Now,
-            Salt = salt
+            Salt = salt,
+            Code = code
         };
 
         var saveEventResult = await _mailConfirmationEventRepository.CreateAsync(mailConfirmationEvent);
@@ -201,28 +227,44 @@ public class UsersController(
         {
             return BadRequest();
         }
-    
-        return await SendConfirmMailMessageAsync(email, salt);
+
+        var sendEmailResult = await SendConfirmMailMessageAsync(email, code);
+        var status = sendEmailResult as StatusCodeResult;
+        if (status.StatusCode != Ok().StatusCode)
+        {
+            return sendEmailResult;
+        }
+
+        var result = new ConfirmEmailRequestDto { Salt = salt };
+        return Ok(result);
+
     }
-    
+
     [HttpPost("confirm-email")]
     public async Task<ActionResult> ConfirmEmailAsync([FromBody] ConfirmEmailRequestDto confirmEmailRequestDto)
     {
         var mailConfirmationEvent =
             await _mailConfirmationEventRepository.GetItemAsNoTrackingAsync(x => x.Salt == confirmEmailRequestDto.Salt);
+        
         if (mailConfirmationEvent is null)
         {
-            return NotFound();
+            return Problem(statusCode: NotFound().StatusCode, detail: "Код больше не действителен");
         }
 
-        if (mailConfirmationEvent.CreatedDate < DateTime.Now.AddMinutes(-10))
+        if (mailConfirmationEvent.CreatedDate < DateTime.Now.AddMinutes(-5))
         {
-            return BadRequest(StatusCode(410));
+            return Problem(statusCode: NotFound().StatusCode, detail: "Время жизни кода вышло");
         }
+
         var user = await _userRepository.GetItemAsNoTrackingAsync(x => x.Email == mailConfirmationEvent.Email);
         if (user is null)
         {
-            return NotFound();
+            return Problem(statusCode: NotFound().StatusCode, detail: "Пользователь не найден");
+        }
+
+        if (mailConfirmationEvent.Code != confirmEmailRequestDto.Code)
+        {
+            return Problem(statusCode: 410, detail: "Невверный код подтверждения");
         }
 
         user.IsEmailConfirmed = true;

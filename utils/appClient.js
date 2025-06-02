@@ -1,7 +1,7 @@
 import useSWR from "swr";
 import useSWRMutation from "swr/mutation";
 
-const API_BASE_URL = "https://localhost:44327";
+const API_BASE_URL = "https://localhost:7022";
 
 const fetcher = async (url) => {
   const res = await fetch(`${API_BASE_URL}${url}`);
@@ -37,11 +37,14 @@ export const useAPIMutation = (url) => {
 
       if (!res.ok) {
         const error = new Error(`HTTP error! Status: ${res.status}`);
-        error.info = await res.json();
+        const text = await res.json();
+        error.status = res.status;
+        error.detail = text.detail;
         throw error;
       }
 
-      return await res.json();
+      const text = await res.text();
+      return text ? JSON.parse(text) : null;
     }
   );
 

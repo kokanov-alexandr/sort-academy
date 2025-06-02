@@ -19,4 +19,10 @@ public class MailConfirmationEvent : BaseModel
     /// Дата создания
     /// </summary>
     public DateTime CreatedDate { get; set; }
+
+    /// <summary>
+    /// Код подтверждения
+    /// </summary>
+    public string Code { get; set; }
+
 }

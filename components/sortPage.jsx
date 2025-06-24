@@ -35,14 +35,48 @@ const SortPage = ({
   };
 
   return (
-    <div>
+    <div className="container mx-auto px-4 max-w-8xl">
       <div className="sorting-visualizer">
-        <h1>Визуализатор сортировок - {title}</h1>
-        <div className="controls">
-          <Button onClick={() => initRandomArray()} disabled={isSorting}>
+        <h1 className="text-2xl sm:text-3xl font-bold mb-6 text-white tracking-tight">
+          Визуализатор сортировок —{" "}
+          <span className="text-primary">{title}</span>
+        </h1>
+        <div className="controls flex flex-wrap gap-4 items-end mb-8">
+          <Button
+            onClick={() => initRandomArray()}
+            disabled={isSorting}
+            className="mb-2"
+          >
             Размешать
           </Button>
-          <div className="flex items-center space-x-2">
+          <Button
+            onClick={async () => {
+              await sortFunction();
+            }}
+            className="mb-2"
+          >
+            Сортировать
+          </Button>
+          <div className="flex flex-col gap-1 mb-2">
+            <span className="text-xs text-gray-400">Сортировка</span>
+            <RadioGroup
+              value={sortDirection}
+              onValueChange={setsortDirection}
+              color="secondary"
+              label="Сортировка"
+              className="flex gap-4"
+            >
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="ascending" />
+                <Label htmlFor="r1">Возрастание</Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="descending" />
+                <Label htmlFor="r1">Убывание</Label>
+              </div>
+            </RadioGroup>
+          </div>
+          <div className="flex items-center space-x-2 mb-2">
             <Checkbox
               id="terms"
               checked={withDuplicates}
@@ -55,49 +89,34 @@ const SortPage = ({
               С повторениями
             </label>
           </div>
-          <RadioGroup
-            value={sortDirection}
-            onValueChange={setsortDirection}
-            color="secondary"
-            label="Сортировка"
-          >
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="ascending" />
-              <Label htmlFor="r1">Возрастание</Label>
-            </div>
-
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="descending" />
-              <Label htmlFor="r1">Убывание</Label>
-            </div>
-          </RadioGroup>
-          <Button
-            onClick={async () => {
-              await sortFunction();
-            }}
-          >
-            Сортировать
-          </Button>
-          <label>Количество элементов: {arraySize}</label>
-          <Slider
-            defaultValue={[arraySize]}
-            max={100}
-            step={1}
-            onValueChange={setArraySize}
-            disabled={isSorting}
-            className={cn("w-[30%]")}
-          />
-          <label>Скорость Сортировки: {sortingSpeed}</label>
-          <Slider
-            defaultValue={[sortingSpeed]}
-            max={1500}
-            step={1}
-            onValueChange={setSortingSpeed}
-            disabled={isSorting}
-            className={cn("w-[30%]")}
-          />{" "}
+          <div className="flex flex-col gap-2 w-full max-w-md">
+            <label className="text-sm text-gray-300">
+              Количество элементов:{" "}
+              <span className="font-semibold text-white">{arraySize}</span>
+            </label>
+            <Slider
+              defaultValue={[arraySize]}
+              max={100}
+              step={1}
+              onValueChange={setArraySize}
+              disabled={isSorting}
+              className={cn("w-full")}
+            />
+            <label className="text-sm text-gray-300 mt-2">
+              Скорость сортировки:{" "}
+              <span className="font-semibold text-white">{sortingSpeed}</span>
+            </label>
+            <Slider
+              defaultValue={[sortingSpeed]}
+              max={1500}
+              step={1}
+              onValueChange={setSortingSpeed}
+              disabled={isSorting}
+              className={cn("w-full")}
+            />
+          </div>
         </div>
-        <div className="visualization-container">
+        <div className="">
           <SortChart
             data={array}
             containerHeight={300}

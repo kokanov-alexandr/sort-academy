@@ -74,13 +74,14 @@ const BubbleSort = ({}) => {
     finishSort();
   };
 
-  const pythonCode = ``;
+  const pythonCode = `def shakerSort(arr):\n    n = len(arr)\n    swapped = True\n    start = 0\n    end = n - 1\n    while swapped:\n        swapped = False\n        for i in range(start, end):\n            if arr[i] > arr[i + 1]:\n                arr[i], arr[i + 1] = arr[i + 1], arr[i]\n                swapped = True\n        if not swapped:\n            break\n        swapped = False\n        end -= 1\n        for i in range(end - 1, start - 1, -1):\n            if arr[i] > arr[i + 1]:\n                arr[i], arr[i + 1] = arr[i + 1], arr[i]\n                swapped = True\n        start += 1`;
 
-  const cppCode = ``;
+  const cppCode = `void shakerSort(int arr[], int n) {\n    bool swapped = true;\n    int start = 0;\n    int end = n - 1;\n    while (swapped) {\n        swapped = false;\n        for (int i = start; i < end; ++i) {\n            if (arr[i] > arr[i + 1]) {\n                std::swap(arr[i], arr[i + 1]);\n                swapped = true;\n            }\n        }\n        if (!swapped)\n            break;\n        swapped = false;\n        --end;\n        for (int i = end - 1; i >= start; --i) {\n            if (arr[i] > arr[i + 1]) {\n                std::swap(arr[i], arr[i + 1]);\n                swapped = true;\n            }\n        }\n        ++start;\n    }\n}`;
 
-  const cCode = ``;
+  const cCode = `void shakerSort(int arr[], int n) {\n    int start = 0, end = n - 1, i, temp;\n    int swapped = 1;\n    while (swapped) {\n        swapped = 0;\n        for (i = start; i < end; ++i) {\n            if (arr[i] > arr[i + 1]) {\n                temp = arr[i];\n                arr[i] = arr[i + 1];\n                arr[i + 1] = temp;\n                swapped = 1;\n            }\n        }\n        if (!swapped)\n            break;\n        swapped = 0;\n        --end;\n        for (i = end - 1; i >= start; --i) {\n            if (arr[i] > arr[i + 1]) {\n                temp = arr[i];\n                arr[i] = arr[i + 1];\n                arr[i + 1] = temp;\n                swapped = 1;\n            }\n        }\n        ++start;\n    }\n}`;
 
-  const cSharpCode = ``;
+  const cSharpCode = `void ShakerSort(int[] arr) {\n    int n = arr.Length;\n    bool swapped = true;\n    int start = 0, end = n - 1;\n    while (swapped) {\n        swapped = false;\n        for (int i = start; i < end; ++i) {\n            if (arr[i] > arr[i + 1]) {\n                int temp = arr[i];\n                arr[i] = arr[i + 1];\n                arr[i + 1] = temp;\n                swapped = true;\n            }\n        }\n        if (!swapped)\n            break;\n        swapped = false;\n        --end;\n        for (int i = end - 1; i >= start; --i) {\n            if (arr[i] > arr[i + 1]) {\n                int temp = arr[i];\n                arr[i] = arr[i + 1];\n                arr[i + 1] = temp;\n                swapped = true;\n            }\n        }\n        ++start;\n    }\n}`;
+
   return (
     <SortPage
       title="Сортировка пузырьком"

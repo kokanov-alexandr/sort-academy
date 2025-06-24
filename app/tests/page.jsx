@@ -1,6 +1,22 @@
 "use client";
 import Link from "next/link";
-import testsService from "../../serviсes/testsService";
+import testsService from "../../components/services/testsService";
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import Loadiing from "@/components/loading";
+import EmailCodeInput from "@/components/emailCodeInput";
+
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
 
 const Tests = ({}) => {
   const {
@@ -9,24 +25,41 @@ const Tests = ({}) => {
     isLoading: testsLoading,
   } = testsService.useGetTests();
 
-  if (testsLoading) return <p>Loading tests...</p>;
+  if (testsLoading) return <Loadiing></Loadiing>;
   if (testsError) return <p>Error: {testsError.message}</p>;
 
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <h1>Тесты</h1>
-        <div>
+    <div className="container mx-auto px-4 max-w-6xl">
+      <main>
+        <h1 className="text-3xl font-bold tracking-tight mb-8">Тесты</h1>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
           {tests.map((item, index) => (
             <div key={item.id}>
-              <h2>
-                id: {item.id} Название: {item.name}
-              </h2>
-              <p>Описание: {item.description}</p>
-              <br />
-              <Link href={`/test/${item.id}`}>
-                <button>Пройти тест</button>
-              </Link>
+              <Card className="">
+                <CardHeader>
+                  <CardTitle>{item.name}</CardTitle>
+                  <CardDescription>{item.description}</CardDescription>
+                </CardHeader>
+                <CardContent className="text-left">
+                  {item.sorting && item.sorting.name ? (
+                    <Link
+                      href={`/${item.sorting.name}`}
+                      className="mt-2 mb-1 text-xs font-semibold text-gray-500 hover:underline"
+                    >
+                      #{item.sorting.displayName}
+                    </Link>
+                  ) : (
+                    item.sorting && (
+                      <div className="mt-2 mb-1 text-xs font-semibold text-gray-500">
+                        #{item.sorting.displayName}
+                      </div>
+                    )
+                  )}
+                </CardContent>
+                <Button type="submit" className="mx-auto">
+                  Пройти тест
+                </Button>
+              </Card>
             </div>
           ))}
         </div>

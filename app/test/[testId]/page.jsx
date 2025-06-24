@@ -1,13 +1,13 @@
 "use client";
 import { useParams } from "next/navigation";
-import testsService from "../../../serviсes/testsService";
-import testResultsService from "../../../serviсes/testResultService";
+import testsService from "../../../components/services/testsService";
+import testResultsService from "../../../components/services/testResultService";
 import { useState, useEffect } from "react";
 import TestResult from "@/components/testResult";
 
 const TestPage = () => {
   const { testId } = useParams();
-  const userId = 1;
+  const userId = 1016;
   const {
     data: test,
     error: testError,
@@ -66,8 +66,8 @@ const TestPage = () => {
       const newTestResult = await createTestResultDto();
       storedTestResultId = newTestResult;
       setTestResultId(storedTestResultId);
-      localStorage.setItem("testResultId", storedTestResultId);
-      localStorage.setItem("currentQuestionIndex", 0);
+      // localStorage.setItem("testResultId", storedTestResultId);
+      // localStorage.setItem("currentQuestionIndex", 0);
     } else {
       setTestResultId(storedTestResultId);
       let storedCurrentQuestionIndex = localStorage.getItem(
@@ -121,7 +121,7 @@ const TestPage = () => {
       ></TestResult>
     );
   }
-
+  
   return (
     <div>
       <h2>Тест</h2>

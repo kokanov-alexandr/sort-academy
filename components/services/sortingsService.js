@@ -1,4 +1,4 @@
-import { useAPI, useAPIMutation } from "../utils/appClient";
+import { useAPI, useAPIMutation } from "../../utils/appClient";
 
 const sortingsService = {
   useGetSortings: () => {

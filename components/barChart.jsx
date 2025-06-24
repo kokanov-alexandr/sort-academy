@@ -29,7 +29,6 @@ const BarChart = ({ data, containerHeight }) => {
       ))}
       <style jsx>{`
         .bar-chart-container {
-          border: 1px solid #ccc;
           overflow: hidden;
         }
         .bar {

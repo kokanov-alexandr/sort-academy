@@ -1,47 +1,38 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useState } from "react";
 
-const Reatization = ({ pythonCode, cppCode, cCode, cSharpCode }) => {
-  const [language, setlanguage] = useState("python");
-  const [codeString, setCode] = useState(pythonCode);
-  const changeLanguageHandle = (event, value) => {
-    setlanguage(value);
-    switch (value) {
-      case "python":
-        setCode(pythonCode);
-        break;
-
-      case "cpp":
-        setCode(cppCode);
-        break;
-
-      case "c":
-        setCode(cCode);
-        break;
-      case "csharp":
-        setCode(cSharpCode);
-        break;
-    }
-  };
-
+const Realization = ({ pythonCode, cppCode, cCode, cSharpCode }) => {
   return (
-    <div>
-      <Tabs
-        onChange={changeLanguageHandle}
-        defaultValue="account"
-        className="w-[400px]"
-      >
-        <TabsList>
+    <div className="mt-8">
+      <Tabs defaultValue="python" className="w-full max-w-2xl">
+        <TabsList className="mb-2">
           <TabsTrigger value="python">Python</TabsTrigger>
           <TabsTrigger value="cpp">C++</TabsTrigger>
           <TabsTrigger value="c">C</TabsTrigger>
           <TabsTrigger value="csharp">C#</TabsTrigger>
         </TabsList>
-        <TabsContent value="python">pythonCode</TabsContent>
-        <TabsContent value="password">Change your password here.</TabsContent>
+        <TabsContent value="python">
+          <pre className="bg-zinc-900 text-white rounded-lg p-4 overflow-x-auto text-sm">
+            <code>{pythonCode || "Нет кода для Python"}</code>
+          </pre>
+        </TabsContent>
+        <TabsContent value="cpp">
+          <pre className="bg-zinc-900 text-white rounded-lg p-4 overflow-x-auto text-sm">
+            <code>{cppCode || "Нет кода для C++"}</code>
+          </pre>
+        </TabsContent>
+        <TabsContent value="c">
+          <pre className="bg-zinc-900 text-white rounded-lg p-4 overflow-x-auto text-sm">
+            <code>{cCode || "Нет кода для C"}</code>
+          </pre>
+        </TabsContent>
+        <TabsContent value="csharp">
+          <pre className="bg-zinc-900 text-white rounded-lg p-4 overflow-x-auto text-sm">
+            <code>{cSharpCode || "Нет кода для C#"}</code>
+          </pre>
+        </TabsContent>
       </Tabs>
     </div>
   );
 };
 
-export default Reatization;
+export default Realization;

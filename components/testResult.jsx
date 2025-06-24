@@ -1,6 +1,7 @@
 "use client";
 import { useParams } from "next/navigation";
-import testResultsService from "../serviсes/testResultService";
+import testResultService from "../components/services/testResultService";
+
 import Link from "next/link";
 
 const TestResult = ({ testResultId, startTest }) => {
@@ -8,7 +9,7 @@ const TestResult = ({ testResultId, startTest }) => {
     data: testResult,
     error: testResultError,
     isLoading: testResultLoading,
-  } = testResultsService.useGetTestResultById(testResultId);
+  } = testResultService.useGetTestResultById(testResultId);
 
   if (testResultLoading) return <div style={styles.loading}>Загрузка...</div>;
   if (testResultError)

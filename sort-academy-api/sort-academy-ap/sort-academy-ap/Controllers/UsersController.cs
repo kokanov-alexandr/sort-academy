@@ -32,7 +32,6 @@ public class UsersController(
     private readonly MailConfirmationEventRepository _mailConfirmationEventRepository = mailConfirmationEventRepository;
     private readonly IConfiguration _configuration = configuration;
 
-    [Authorize]
     [HttpGet]
     public async Task<ActionResult<List<User>>> GetUsersAsync()
     {

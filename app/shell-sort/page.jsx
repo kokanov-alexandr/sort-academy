@@ -57,13 +57,13 @@ const ShellSort = ({}) => {
     finishSort();
   };
 
-  const pythonCode = ``;
+  const pythonCode = `def shellSort(arr):\n    n = len(arr)\n    gap = n // 2\n    while gap > 0:\n        for i in range(gap, n):\n            temp = arr[i]\n            j = i\n            while j >= gap and arr[j - gap] > temp:\n                arr[j] = arr[j - gap]\n                j -= gap\n            arr[j] = temp\n        gap //= 2`;
 
-  const cppCode = ``;
+  const cppCode = `void shellSort(int arr[], int n) {\n    for (int gap = n/2; gap > 0; gap /= 2) {\n        for (int i = gap; i < n; i++) {\n            int temp = arr[i];\n            int j;\n            for (j = i; j >= gap && arr[j - gap] > temp; j -= gap)\n                arr[j] = arr[j - gap];\n            arr[j] = temp;\n        }\n    }\n}`;
 
-  const cCode = ``;
+  const cCode = `void shellSort(int arr[], int n) {\n    int gap, i, j, temp;\n    for (gap = n/2; gap > 0; gap /= 2) {\n        for (i = gap; i < n; i++) {\n            temp = arr[i];\n            for (j = i; j >= gap && arr[j - gap] > temp; j -= gap)\n                arr[j] = arr[j - gap];\n            arr[j] = temp;\n        }\n    }\n}`;
 
-  const cSharpCode = ``;
+  const cSharpCode = `void ShellSort(int[] arr) {\n    int n = arr.Length;\n    for (int gap = n / 2; gap > 0; gap /= 2) {\n        for (int i = gap; i < n; i++) {\n            int temp = arr[i];\n            int j;\n            for (j = i; j >= gap && arr[j - gap] > temp; j -= gap)\n                arr[j] = arr[j - gap];\n            arr[j] = temp;\n        }\n    }\n}`;
 
   return (
     <SortPage

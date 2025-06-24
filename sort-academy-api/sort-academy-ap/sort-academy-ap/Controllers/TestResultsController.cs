@@ -14,7 +14,6 @@ namespace sort_academy_api.Controllers;
 /// <param name="testResultRepository"></param>
 /// <param name="questionResultRepository"></param>
 /// <param name="mapperProvider"></param>
-[Authorize]
 [Route("tests/results")]
 public class TestResultsController(TestResultRepository testResultRepository, 
     QuestionResultRepository questionResultRepository, MapperProvider mapperProvider) : Controller

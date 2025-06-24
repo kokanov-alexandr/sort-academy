@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
-import testsService from "../../../serviсes/testsService";
-import sortingsService from "../../../serviсes/sortingsService";
+import testsService from "../../../components/services/testsService";
+import sortingsService from "../../../components/services/sortingsService";
 
 const CreateTest = ({}) => {
   const {
@@ -11,7 +11,7 @@ const CreateTest = ({}) => {
   } = sortingsService.useGetSortings();
 
   const {
-    trigger: createTest,  
+    trigger: createTest,
     error: createError,
     isMutating,
   } = testsService.useCreateTest();

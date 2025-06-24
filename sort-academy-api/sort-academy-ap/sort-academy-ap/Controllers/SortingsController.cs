@@ -12,7 +12,6 @@ namespace sort_academy_api.Controllers;
 /// Контроллер для работы с соритровками
 /// </summary>
 /// <param name="sortingRepository"></param>
-[Authorize]
 [Route("sortings")]
 public class SortingsController(SortingRepository sortingRepository, MapperProvider mapperProvider) : Controller
 {
@@ -24,6 +23,19 @@ public class SortingsController(SortingRepository sortingRepository, MapperProvi
     {
         var sortings = await _sortingRepository.GetSortingsAsync();
         var mapResult = _mapperProvider.CreateMapByProfileForList<Sorting, SortingDto, SortingProfile>(sortings);
+        if (mapResult is null)
+        {
+            return BadRequest();
+        }
+
+        return Ok(mapResult);
+    }
+
+    [HttpGet("{name}")]
+    public async Task<ActionResult<SortingDto>> GetSortingByNameAsync([FromRoute] string name)
+    {
+        var sorting = await _sortingRepository.GetSortingByNameAsync(name);
+        var mapResult = _mapperProvider.CreateMapByProfile<Sorting, SortingDto, SortingProfile>(sorting);
         if (mapResult is null)
         {
             return BadRequest();

@@ -1,17 +1,27 @@
 import React, { useMemo } from "react";
 
-const BarChart = ({ data, containerHeight }) => {
+const BarChart = ({ data, containerHeight, barColor }) => {
   const max = useMemo(() => {
     return Math.max(...data);
   }, [data]);
 
-  const barStyle = (value) => {
+  const barStyle = (value, index) => {
     const barHeight = (value / max) * containerHeight;
-    return {
+    const style = {
       height: barHeight,
-      width: "200px",
-      backgroundColor: "blue",
+      width: "32px",
+      borderRadius: "2px 2px 0 0",
+      margin: "0 3px",
+      transition: "none",
+      display: "inline-block",
     };
+    if (barColor) {
+      style.backgroundColor = barColor;
+      style.background = "none";
+    } else {
+      style.background = "#93c5fd";
+    }
+    return style;
   };
 
   return (
@@ -25,16 +35,19 @@ const BarChart = ({ data, containerHeight }) => {
       }}
     >
       {data.map((value, index) => (
-        <div key={index} className="bar" style={barStyle(value)}></div>
+        <div key={index} className="bar" style={barStyle(value, index)}></div>
       ))}
       <style jsx>{`
         .bar-chart-container {
           overflow: hidden;
         }
         .bar {
-          width: 10px;
-          background-color: blue;
-          margin: 0;
+          width: 32px;
+          background: #93c5fd;
+          border-radius: 2px 2px 0 0;
+          margin: 0 3px;
+          transition: none;
+          display: inline-block;
         }
       `}</style>
     </div>

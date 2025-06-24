@@ -68,6 +68,7 @@ const ShellSort = ({}) => {
   return (
     <SortPage
       title="Сортировка Шелла"
+      sortingName="shell-sort"
       array={array}
       setArray={setArray}
       arraySize={arraySize}

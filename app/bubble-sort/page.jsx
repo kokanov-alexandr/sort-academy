@@ -1,6 +1,26 @@
 "use client";
 import SortPage from "@/components/sortPage";
 import useSortingAnimation from "@/utils/sortLogic";
+import { useEffect, useState } from "react";
+import {
+  Card,
+  CardContent,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
+import sortingsService from "@/components/services/sortingsService";
+
+const complexityMap = {
+  1: "O(1)",
+  2: "O(log n)",
+  3: "O(√n)",
+  4: "O(n)",
+  5: "O(n log n)",
+  6: "O(n^2)",
+  7: "O(n^3)",
+  8: "O(2^n)",
+  9: "O(n!)",
+};
 
 const BubbleSort = ({}) => {
   const {
@@ -29,6 +49,12 @@ const BubbleSort = ({}) => {
     lastSortDirection,
     processEpements,
   } = useSortingAnimation();
+
+  const {
+    data: sortingInfo,
+    error,
+    isLoading,
+  } = sortingsService.useGetSortingByName("bubble-sort");
 
   const bubbleSort = async () => {
     if (isSorted && lastSortDirection.current == sortDirection) {
@@ -96,36 +122,38 @@ void bubbleSort(int arr[], int n) {
   }
 }`;
 
-  console.log(array);
   const cSharpCode = ``;
   return (
-    <SortPage
-      title="Сортировка пузырьком"
-      array={array}
-      setArray={setArray}
-      arraySize={arraySize}
-      setArraySize={setArraySize}
-      sortingSpeed={sortingSpeed}
-      setSortingSpeed={setSortingSpeed}
-      inputValue={inputValue}
-      setInputValue={setInputValue}
-      isSorting={isSorting}
-      setIsSorting={setIsSorting}
-      isSorted={isSorted}
-      setIsSorted={setIsSorted}
-      withDuplicates={withDuplicates}
-      setWithDuplicates={setWithDuplicates}
-      sortDirection={sortDirection}
-      setsortDirection={setsortDirection}
-      initShuffledArray={initShuffledArray}
-      initRandomArray={initRandomArray}
-      handleInputChange={handleInputChange}
-      sortFunction={bubbleSort}
-      pythonCode={pythonCode}
-      cppCode={cppCode}
-      cCode={cCode}
-      cSharpCode={cSharpCode}
-    ></SortPage>
+    <>
+      <SortPage
+        title="Сортировка пузырьком"
+        sortingName="bubble-sort"
+        array={array}
+        setArray={setArray}
+        arraySize={arraySize}
+        setArraySize={setArraySize}
+        sortingSpeed={sortingSpeed}
+        setSortingSpeed={setSortingSpeed}
+        inputValue={inputValue}
+        setInputValue={setInputValue}
+        isSorting={isSorting}
+        setIsSorting={setIsSorting}
+        isSorted={isSorted}
+        setIsSorted={setIsSorted}
+        withDuplicates={withDuplicates}
+        setWithDuplicates={setWithDuplicates}
+        sortDirection={sortDirection}
+        setsortDirection={setsortDirection}
+        initShuffledArray={initShuffledArray}
+        initRandomArray={initRandomArray}
+        handleInputChange={handleInputChange}
+        sortFunction={bubbleSort}
+        pythonCode={pythonCode}
+        cppCode={cppCode}
+        cCode={cCode}
+        cSharpCode={cSharpCode}
+      ></SortPage>
+    </>
   );
 };
 

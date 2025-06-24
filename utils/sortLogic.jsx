@@ -5,7 +5,7 @@ function useSortingAnimation() {
   const DEFAULT_ARRAY_SIZE = 47;
   const DEFAULT_SORTING_SPEED = 1500;
   const DEFAULT_SORT_DIRECTION = "ascending";
-  const DEFAULT_COLOR = "blue";
+  const DEFAULT_COLOR = "#93c5fd";
   const BAD_COLOR = "red";
   const GOOD_COLOR = "green";
   const [array, setArray] = useState([]);
@@ -34,7 +34,7 @@ function useSortingAnimation() {
       .slice(0, arraySize);
     setArray(shuffledArray);
     setIsSorted(false);
-  };
+  };  
 
   const finishSort = () => {
     setIsSorting(false);

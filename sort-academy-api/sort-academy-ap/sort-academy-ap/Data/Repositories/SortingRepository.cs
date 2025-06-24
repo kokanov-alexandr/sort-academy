@@ -23,4 +23,21 @@ public class SortingRepository(SortAcademyDbContext dbContext, ILogger<BaseRepos
             throw;
         }
     }
+
+
+    public async Task<Sorting> GetSortingByNameAsync(string name)
+    {
+        try
+        {
+            return await dbContext.Sortings
+                      .Include(x => x.SortingSortingProperty)
+                      .ThenInclude(x => x.SortingProperty)
+                      .FirstOrDefaultAsync(x => x.Name == name);
+        }
+        catch (Exception)
+        {
+            Logger.LogError("Ошибка при получении сортировок");
+            throw;
+        }
+    }
 }

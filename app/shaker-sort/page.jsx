@@ -85,6 +85,7 @@ const BubbleSort = ({}) => {
   return (
     <SortPage
       title="Сортировка пузырьком"
+      sortingName="shaker-sort"
       array={array}
       setArray={setArray}
       arraySize={arraySize}

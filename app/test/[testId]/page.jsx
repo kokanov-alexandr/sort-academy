@@ -4,6 +4,17 @@ import testsService from "../../../components/services/testsService";
 import testResultsService from "../../../components/services/testResultService";
 import { useState, useEffect } from "react";
 import TestResult from "@/components/testResult";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+  CardDescription,
+} from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Button } from "@/components/ui/button";
+
+import Loadiing from "@/components/loading";
 
 const TestPage = () => {
   const { testId } = useParams();
@@ -86,7 +97,12 @@ const TestPage = () => {
     startTest();
   }, []);
 
-  if (testLoading) return <p>Loading test...</p>;
+  if (testLoading)
+    return (
+      <p>
+        <Loadiing></Loadiing>
+      </p>
+    );
   if (testError) return <p>Error: {testError.message}</p>;
 
   async function handleNext() {
@@ -110,7 +126,11 @@ const TestPage = () => {
   }
 
   if (isLoading) {
-    return <div>Загрузка...</div>;
+    return (
+      <div>
+        <Loadiing></Loadiing>
+      </div>
+    );
   }
 
   if (isTestCompleted) {
@@ -121,49 +141,67 @@ const TestPage = () => {
       ></TestResult>
     );
   }
-  
-  return (
-    <div>
-      <h2>Тест</h2>
-      <div>
-        <h3>{test.questions[currentQuestionIndex].content}</h3>
-        {test.questions[currentQuestionIndex].answerOptions.map((answer) => (
-          <div key={answer.id}>
-            <label>
-              <input
-                type="checkbox"
-                value={answer.id}
-                onChange={(e) => {
-                  const updatedSelectedAnswers = [...selectedAnswers];
-                  const answerData = {
-                    id: answer.id,
-                    isCorrect: answer.isCorrect,
-                  };
 
-                  if (e.target.checked) {
-                    updatedSelectedAnswers.push(answerData);
-                  } else {
-                    const index = updatedSelectedAnswers.findIndex(
-                      (item) => item.id === answer.id
-                    );
-                    if (index > -1) {
-                      updatedSelectedAnswers.splice(index, 1);
-                    }
-                  }
-                  setSelectedAnswers(updatedSelectedAnswers);
-                }}
-              />
-              <span>{answer.value}</span>
-              {answer.isCorrect ? (
-                <span className="text-green-500"> (Правильный ответ)</span>
-              ) : (
-                <span className="text-red-500"> (Неправильный ответ)</span>
-              )}
-            </label>
+  return (
+    <div className="container mx-auto px-4 max-w-2xl py-8">
+      <Card className="w-fit mx-auto">
+        <CardHeader>
+          <CardTitle className="text-4xl sm:text-4xl font-extrabold text-center mt-4">
+            {test.name}
+          </CardTitle>
+          <CardDescription className="text-center text-lg mb-2">
+            Вопрос {currentQuestionIndex + 1} из {test.questions.length}
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="mb-4 text-xl font-bold text-center">
+            {test.questions[currentQuestionIndex].content}
           </div>
-        ))}
-      </div>
-      <button onClick={handleNext}>Дальше</button>
+          <div className="flex flex-col gap-3">
+            {test.questions[currentQuestionIndex].answerOptions.map(
+              (answer) => (
+                <label
+                  key={answer.id}
+                  className="flex items-center gap-2 p-3 rounded hover:bg-zinc-800 transition-colors cursor-pointer"
+                >
+                  <Checkbox
+                    checked={selectedAnswers.some((a) => a.id === answer.id)}
+                    onCheckedChange={(checked) => {
+                      const updatedSelectedAnswers = [...selectedAnswers];
+                      const answerData = {
+                        id: answer.id,
+                        isCorrect: answer.isCorrect,
+                      };
+                      if (checked) {
+                        updatedSelectedAnswers.push(answerData);
+                      } else {
+                        const index = updatedSelectedAnswers.findIndex(
+                          (item) => item.id === answer.id
+                        );
+                        if (index > -1) {
+                          updatedSelectedAnswers.splice(index, 1);
+                        }
+                      }
+                      setSelectedAnswers(updatedSelectedAnswers);
+                    }}
+                  />
+                  <span className="text-base">{answer.value}</span>
+                </label>
+              )
+            )}
+          </div>
+          <div className="flex justify-center mt-8">
+            <Button
+              className="px-8 py-2 text-lg font-bold"
+              onClick={handleNext}
+            >
+              {currentQuestionIndex < test.questions.length - 1
+                ? "Дальше"
+                : "Завершить тест"}
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 };

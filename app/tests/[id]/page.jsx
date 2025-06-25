@@ -1,6 +1,6 @@
 "use client";
 import { useParams } from "next/navigation";
-import testsService from "../../../serviсes/testsService";
+import testsService from "../../../components/services/testsService";
 
 const Test = () => {
   const { id } = useParams();

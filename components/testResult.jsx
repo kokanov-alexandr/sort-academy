@@ -1,6 +1,9 @@
 "use client";
 import { useParams } from "next/navigation";
 import testResultService from "../components/services/testResultService";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 
 import Link from "next/link";
 
@@ -11,53 +14,98 @@ const TestResult = ({ testResultId, startTest }) => {
     isLoading: testResultLoading,
   } = testResultService.useGetTestResultById(testResultId);
 
-  if (testResultLoading) return <div style={styles.loading}>Загрузка...</div>;
+  if (testResultLoading)
+    return (
+      <div className="text-center text-lg text-blue-600 font-semibold py-8">
+        Загрузка...
+      </div>
+    );
   if (testResultError)
     return (
-      <div style={styles.error}>Ошибка при загрузке результатов теста.</div>
+      <div className="text-center text-lg text-red-600 font-semibold py-8">
+        Ошибка при загрузке результатов теста.
+      </div>
     );
 
   return (
-    <div style={styles.container}>
-      <h1 style={styles.title}>{testResult.test.name}</h1>
-      <h2 style={styles.description}>{testResult.test.description}</h2>
-      <div style={styles.questionsContainer}>
-        {testResult.questionResults.map((questionResult, index) => {
-          const question = questionResult.question;
-          const userAnswers = questionResult.userAnswerOptions.map(
-            (option) => option.value
-          );
-          const correctAnswers = testResult.test.questions
-            .find((q) => q.id === question.id)
-            .answerOptions.filter((option) => option.isCorrect)
-            .map((option) => option.value);
-
-          const isCorrect = correctAnswers.every((answer) =>
-            userAnswers.includes(answer)
-          );
-
-          return (
-            <div key={index} style={styles.questionCard}>
-              <h3 style={styles.questionContent}>{question.content}</h3>
-              <p style={styles.userAnswers}>
-                Ваши ответы:{" "}
-                {userAnswers.length > 0 ? userAnswers.join(", ") : "Нет ответа"}
-              </p>
-              <p style={styles.correctAnswers}>
-                Правильные ответы: {correctAnswers.join(", ")}
-              </p>
-              <p
-                style={{ ...styles.result, color: isCorrect ? "green" : "red" }}
-              >
-                {isCorrect ? "Правильно!" : "Неправильно!"}
-              </p>
-            </div>
-          );
-        })}
-      </div>
-      <button style={styles.retryButton} onClick={startTest}>
-        Пройти тест снова
-      </button>
+    <div className="container mx-auto px-4 max-w-6xl m-6">
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-3xl font-extrabold text-center mb-2">
+            Результаты
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex flex-col gap-6 mt-2">
+            {testResult.questionResults.map((questionResult, index) => {
+              const question = questionResult.question;
+              const userAnswers = questionResult.userAnswerOptions.map(
+                (option) => option.value
+              );
+              const correctAnswers = testResult.test.questions
+                .find((q) => q.id === question.id)
+                .answerOptions.filter((option) => option.isCorrect)
+                .map((option) => option.value);
+              const allAnswers = testResult.test.questions.find(
+                (q) => q.id === question.id
+              ).answerOptions;
+              const isCorrect =
+                userAnswers.length > 0 &&
+                correctAnswers.length === userAnswers.length &&
+                correctAnswers.every((answer) => userAnswers.includes(answer));
+              return (
+                <Card
+                  key={index}
+                  className={`bg-zinc-900 shadow rounded-xl p-4 ${
+                    isCorrect ? "border-green-600" : "border-red-600"
+                  }`}
+                >
+                  <div className="flex flex-col ">
+                    <div className="font-semibold text-lg text-white mb-1">
+                      {index + 1}. {question.content}
+                    </div>
+                    <div className="flex flex-col gap-1 mt-1">
+                      {allAnswers.map((answer) => {
+                        const isChecked = userAnswers.includes(answer.value);
+                        const isAnswerCorrect = answer.isCorrect;
+                        return (
+                          <div
+                            key={answer.id}
+                            className={`flex items-center gap-1 p-2 rounded-lg ${
+                              isAnswerCorrect
+                                ? "bg-green-950/40"
+                                : isChecked
+                                ? "bg-red-950/40"
+                                : "bg-zinc-800/40"
+                            }`}
+                          >
+                            <Checkbox
+                              checked={isChecked}
+                              disabled
+                              className="border-zinc-600"
+                            />
+                            <span className="text-base text-white">
+                              {answer.value}
+                            </span>
+                            <span
+                              className={`ml-2 px-2 py-0.5 rounded-full text-xs font-semibold`}
+                            ></span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </Card>
+              );
+            })}
+          </div>
+          <div className="flex justify-center mt-8">
+            <Button className="mx-auto" onClick={startTest}>
+              Пройти тест снова
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 };

@@ -1,15 +1,36 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useRef, useEffect, useState } from "react";
 
 const BarChart = ({ data, containerHeight, barColor }) => {
   const max = useMemo(() => {
     return Math.max(...data);
   }, [data]);
 
+  const containerRef = useRef(null);
+  const [containerWidth, setContainerWidth] = useState(0);
+
+  useEffect(() => {
+    if (containerRef.current) {
+      setContainerWidth(containerRef.current.offsetWidth);
+    }
+    const handleResize = () => {
+      if (containerRef.current) {
+        setContainerWidth(containerRef.current.offsetWidth);
+      }
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const barWidth =
+    data.length > 0
+      ? Math.max((containerWidth - data.length * 6) / data.length, 5)
+      : 0; // 6px margin per bar
+
   const barStyle = (value, index) => {
     const barHeight = (value / max) * containerHeight;
     const style = {
       height: barHeight,
-      width: "32px",
+      width: barWidth,
       borderRadius: "2px 2px 0 0",
       margin: "0 3px",
       transition: "none",
@@ -28,10 +49,12 @@ const BarChart = ({ data, containerHeight, barColor }) => {
     <div
       id="sort-elements-bar"
       className={`bar-chart-container`}
+      ref={containerRef}
       style={{
         height: "500px",
         display: "flex",
         alignItems: "flex-end",
+        width: "100%",
       }}
     >
       {data.map((value, index) => (
@@ -42,7 +65,6 @@ const BarChart = ({ data, containerHeight, barColor }) => {
           overflow: hidden;
         }
         .bar {
-          width: 32px;
           background: #93c5fd;
           border-radius: 2px 2px 0 0;
           margin: 0 3px;

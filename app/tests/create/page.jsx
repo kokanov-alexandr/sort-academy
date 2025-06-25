@@ -25,7 +25,7 @@ const CreateTest = ({}) => {
   const [questions, setQuestions] = useState([]);
 
   if (sortingsLoading) return <p>Loading sortings...</p>;
-  if (sortingsError) return <p>Error: {testsError.message}</p>;
+  if (sortingsError) return <p>Error: {sortingsError.message}</p>;
 
   const handleCreateTest = async () => {
     try {

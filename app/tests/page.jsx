@@ -58,17 +58,16 @@ const Tests = ({}) => {
                     )
                   )}
                 </CardContent>
-                <Button type="submit" className="mx-auto">
-                  Пройти тест
-                </Button>
+                  <Button className="mx-auto">
+                <Link href={`/test/${item.id}`}>
+                Пройти тест
+                </Link>
+                  </Button>
               </Card>
             </div>
           ))}
         </div>
       </main>
-      <Link href="/tests/create">
-        <button>Перейти на страницу Tests</button>
-      </Link>
     </div>
   );
 };
